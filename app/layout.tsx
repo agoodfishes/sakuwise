@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -21,9 +22,6 @@ export const metadata: Metadata = {
     "saku anggaran",
     "fintech indonesia",
   ],
-  icons: {
-    icon: "/favicon.ico",
-  },
 };
 
 export default function RootLayout({
@@ -34,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${plusJakartaSans.variable} scroll-smooth`}>
       <body className="min-h-screen bg-[#FAF8F5] text-[#1E3A2B] font-sans antialiased selection:bg-[#E08C38]/20 selection:text-[#1E3A2B]">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

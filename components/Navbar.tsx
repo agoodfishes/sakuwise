@@ -71,13 +71,13 @@ export default function Navbar({ onOpenHowItWorks }: NavbarProps) {
           {/* Desktop Right Actions: Masuk & Mulai Gratis */}
           <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
             <a
-              href="#login"
+              href="/login"
               className="text-sm font-semibold text-[#1E3A2B] hover:text-[#0F2218] transition-colors px-3 py-2"
             >
               Masuk
             </a>
             <a
-              href="#register"
+              href="/login"
               className="inline-flex items-center justify-center text-sm font-medium text-white bg-[#224431] hover:bg-[#173324] px-5 py-2.5 rounded-full transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98]"
             >
               Mulai Gratis
@@ -122,14 +122,14 @@ export default function Navbar({ onOpenHowItWorks }: NavbarProps) {
 
             <div className="pt-4 flex flex-col space-y-3">
               <a
-                href="#login"
+                href="/login"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full text-center py-2.5 text-sm font-semibold text-[#1E3A2B] rounded-xl border border-[#D8E2D9] hover:bg-black/5"
               >
                 Masuk
               </a>
               <a
-                href="#register"
+                href="/login"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full flex items-center justify-center gap-2 py-3 text-sm font-medium text-white bg-[#224431] rounded-xl shadow"
               >
