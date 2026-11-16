@@ -59,21 +59,21 @@ export default function Sidebar({
         />
       )}
 
-      {/* Sidebar Container */}
+      {/* Sidebar Container: Fixed height with flex-col & overflow management */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-[#FAF8F5] border-r border-[#E8ECE8] flex flex-col justify-between p-5 transition-transform duration-300 ease-in-out md:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 h-screen max-h-screen bg-[#FAF8F5] border-r border-[#E8ECE8] flex flex-col justify-between p-4 sm:p-5 transition-transform duration-300 ease-in-out md:translate-x-0 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Top Part: Logo & Navigation */}
-        <div className="flex flex-col">
-          {/* Logo */}
-          <div className="pt-2 pb-7 px-2">
-            <Logo />
+        {/* 1. Header & Navigation Section (Scrollable if viewport is short) */}
+        <div className="flex flex-col min-h-0 flex-1">
+          {/* Logo Sakuwise Resmi */}
+          <div className="flex-shrink-0 pt-1 pb-5 px-1">
+            <Logo size="md" />
           </div>
 
-          {/* Navigation Menu */}
-          <nav className="space-y-1">
+          {/* Navigation Menu with independent smooth scroll */}
+          <nav className="flex-1 overflow-y-auto space-y-1 pr-1 -mr-1 py-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -100,18 +100,20 @@ export default function Sidebar({
           </nav>
         </div>
 
-        {/* Bottom Part: Motivation Card, Settings, Support & Profile */}
-        <div className="flex flex-col space-y-4 pt-4 border-t border-[#EDF1EE]">
+        {/* 2. Bottom Section: Motivation, Settings, Help & Profile (Always Pinned & Fully Visible) */}
+        <div className="flex-shrink-0 pt-3 border-t border-[#EDF1EE] space-y-3 bg-[#FAF8F5]">
           
           {/* Motivational Card */}
-          <div className="bg-[#EBF1EC] rounded-2xl p-4 border border-[#DCE5DE]">
-            <div className="w-6 h-6 rounded-lg bg-white/70 flex items-center justify-center text-[#244833] mb-2.5">
-              <Sparkles className="w-3.5 h-3.5" />
+          <div className="bg-[#EBF1EC] rounded-xl p-3 border border-[#DCE5DE]">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-5 h-5 rounded-md bg-white/80 flex items-center justify-center text-[#244833]">
+                <Sparkles className="w-3 h-3 text-[#E08C38] fill-[#E08C38]" />
+              </div>
+              <p className="text-[11px] font-bold text-[#1E3A2B] leading-tight">
+                Your future self will thank you.
+              </p>
             </div>
-            <p className="text-xs font-bold text-[#1E3A2B]">
-              Your future self will thank you.
-            </p>
-            <p className="text-[11px] text-[#5C7063] mt-0.5">
+            <p className="text-[10px] text-[#5C7063] leading-tight">
               A little saved goes a long way.
             </p>
           </div>
@@ -121,30 +123,30 @@ export default function Sidebar({
             <button
               type="button"
               onClick={() => setActiveTab("settings")}
-              className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium text-[#586C5E] hover:text-[#1E3A2B] hover:bg-black/[0.03] transition-colors cursor-pointer ${
+              className={`w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#586C5E] hover:text-[#1E3A2B] hover:bg-black/[0.03] transition-colors cursor-pointer ${
                 activeTab === "settings" ? "bg-[#E5ECE6] text-[#1E3A2B] font-bold" : ""
               }`}
             >
-              <SlidersHorizontal className="w-4 h-4 text-[#7B8E81]" />
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#7B8E81]" />
               <span>Settings</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab("help")}
-              className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium text-[#586C5E] hover:text-[#1E3A2B] hover:bg-black/[0.03] transition-colors cursor-pointer ${
+              className={`w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#586C5E] hover:text-[#1E3A2B] hover:bg-black/[0.03] transition-colors cursor-pointer ${
                 activeTab === "help" ? "bg-[#E5ECE6] text-[#1E3A2B] font-bold" : ""
               }`}
             >
-              <HelpCircle className="w-4 h-4 text-[#7B8E81]" />
+              <HelpCircle className="w-3.5 h-3.5 text-[#7B8E81]" />
               <span>Help & support</span>
             </button>
           </div>
 
-          {/* Active User Profile & Logout */}
-          <div className="relative pt-2">
+          {/* Active User Profile & Logout (Pinned and perfectly visible on all screens) */}
+          <div className="relative pt-1">
             {profileDropdownOpen && (
-              <div className="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-2xl shadow-xl border border-[#DCE4DD] p-2 space-y-1 animate-in fade-in slide-in-from-bottom-2 duration-150 z-20">
+              <div className="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-2xl shadow-xl border border-[#DCE4DD] p-2 space-y-1 animate-in fade-in slide-in-from-bottom-2 duration-150 z-30">
                 <div className="px-3 py-2 border-b border-[#F0F4F1]">
                   <p className="text-xs font-bold text-[#1E3A2B]">{displayName}</p>
                   <p className="text-[10px] text-[#718275] truncate">
@@ -165,10 +167,10 @@ export default function Sidebar({
             <button
               type="button"
               onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-              className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-black/[0.04] transition-colors text-left cursor-pointer group"
+              className="w-full flex items-center justify-between p-2 rounded-xl bg-white/70 hover:bg-white border border-[#E5ECE5] transition-all text-left cursor-pointer group shadow-2xs"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-full bg-[#244833] text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#244833] text-white text-xs font-bold flex items-center justify-center flex-shrink-0 shadow-inner">
                   {displayName.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0">
@@ -181,7 +183,7 @@ export default function Sidebar({
                 </div>
               </div>
               <ChevronUp
-                className={`w-3.5 h-3.5 text-[#7B8E81] transition-transform ${
+                className={`w-3.5 h-3.5 text-[#7B8E81] transition-transform flex-shrink-0 ${
                   profileDropdownOpen ? "rotate-180" : ""
                 }`}
               />

@@ -10,6 +10,7 @@ import AIAssistantView from "@/components/dashboard/AIAssistantView";
 import BillsView from "@/components/dashboard/BillsView";
 import SavingsGoalsView from "@/components/dashboard/SavingsGoalsView";
 import SettingsView from "@/components/dashboard/SettingsView";
+import HelpView from "@/components/dashboard/HelpView";
 import AddExpenseModal from "@/components/dashboard/AddExpenseModal";
 import { useAuth } from "@/context/AuthContext";
 
@@ -105,24 +106,7 @@ export default function DashboardPage() {
       case "settings":
         return <SettingsView />;
       case "help":
-        return (
-          <div className="bg-white rounded-2xl p-6 sm:p-7 border border-[#E7EDE7] shadow-2xs space-y-4">
-            <h2 className="text-base font-bold text-[#1E3A2B]">Pusat Bantuan & Dukungan Sakuwise</h2>
-            <p className="text-xs text-[#718576]">
-              Butuh bantuan dengan pembagian saku anggaran atau ingin panduan penggunaan fitur?
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7EDE7]">
-                <p className="text-xs font-bold text-[#1E3A2B]">Panduan Metode 50/30/20</p>
-                <p className="text-[11px] text-[#718576] mt-1">Pelajari cara mengalokasikan gaji pertama atau kiriman bulanan.</p>
-              </div>
-              <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7EDE7]">
-                <p className="text-xs font-bold text-[#1E3A2B]">Hubungi Dukungan</p>
-                <p className="text-[11px] text-[#718576] mt-1">Tim Sakuwise siap membantumu di halo@sakuwise.id</p>
-              </div>
-            </div>
-          </div>
-        );
+        return <HelpView />;
       default:
         return (
           <OverviewView
