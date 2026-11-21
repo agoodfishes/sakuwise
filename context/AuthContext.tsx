@@ -40,7 +40,7 @@ const DEFAULT_USERS_DB: Record<string, { name: string; passwordHash: string; rol
   "admin@sakuwise.id": {
     name: "Admin Sakuwise",
     passwordHash: "admin123",
-    role: "Premium account",
+    role: "Akun Sakuwise",
   },
 };
 

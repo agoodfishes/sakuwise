@@ -33,7 +33,6 @@ export default function Navbar({ onOpenHowItWorks }: NavbarProps) {
         : undefined,
     },
     { name: "Keamanan", href: "#keamanan" },
-    { name: "Harga", href: "#harga" },
   ];
 
   return (

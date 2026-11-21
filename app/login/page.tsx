@@ -3,34 +3,33 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/Logo";
-import GoogleIcon from "@/components/GoogleIcon";
+import HeroDashboardMockup from "@/components/HeroDashboardMockup";
 import { useAuth } from "@/context/AuthContext";
 import {
   ArrowLeft,
-  ShieldCheck,
+  User as UserIcon,
+  Lock,
   Eye,
   EyeOff,
   AlertCircle,
   Sparkles,
-  Lock,
-  Mail,
-  User as UserIcon,
 } from "lucide-react";
 
 export default function LoginPage() {
-  const { loginWithEmail, signUpWithEmail, loginWithGoogle, isLoading } = useAuth();
+  const { loginWithEmail, signUpWithEmail, isLoading } = useAuth();
 
   const [mode, setMode] = useState<"login" | "signup">("login");
+  const [identifier, setIdentifier] = useState("");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Quick Demo Account Click
+  // 1-Click Demo Fill
   const handleQuickDemo = async () => {
     setErrorMessage(null);
-    setEmail("najwa.finance@student.ac.id");
+    setIdentifier("najwa.finance@student.ac.id");
     setPassword("password123");
     await loginWithEmail("najwa.finance@student.ac.id", "password123");
   };
@@ -39,251 +38,298 @@ export default function LoginPage() {
     e.preventDefault();
     setErrorMessage(null);
 
+    if (!identifier.trim() || !password) {
+      setErrorMessage("Silakan isi semua data yang diperlukan.");
+      return;
+    }
+
     if (mode === "login") {
-      const res = await loginWithEmail(email, password);
+      // Support login via email or username
+      const emailValue = identifier.includes("@")
+        ? identifier.trim()
+        : `${identifier.trim().toLowerCase()}@sakuwise.id`;
+
+      const res = await loginWithEmail(emailValue, password);
       if (!res.success && res.error) {
         setErrorMessage(res.error);
       }
     } else {
-      const res = await signUpWithEmail(name, email, password);
+      // Sign Up mode
+      const emailValue = identifier.includes("@")
+        ? identifier.trim()
+        : `${identifier.trim().toLowerCase()}@sakuwise.id`;
+
+      const res = await signUpWithEmail(name || identifier.split("@")[0], emailValue, password);
       if (!res.success && res.error) {
         setErrorMessage(res.error);
       }
     }
   };
 
-  const handleGoogleAuth = async () => {
-    setErrorMessage(null);
-    await loginWithGoogle({
-      name: name.trim() || "Najwa",
-      email: email.trim() || "najwa.finance@student.ac.id",
-      role: "Student account",
-    });
-  };
-
   return (
-    <div className="min-h-screen bg-[#FAF8F5] flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background soft ambient glows */}
-      <div
-        className="absolute -top-32 -left-32 w-96 h-96 bg-[#E8EFEA]/70 rounded-full blur-3xl pointer-events-none"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#FEF3E2]/60 rounded-full blur-3xl pointer-events-none"
-        aria-hidden="true"
-      />
+    <div className="min-h-screen bg-white grid grid-cols-1 lg:grid-cols-2 text-[#1E3A2B]">
+      
+      {/* ================= LEFT COLUMN: FORM LOGIN ================= */}
+      <div className="flex flex-col justify-between p-6 sm:p-10 lg:p-16 max-w-xl mx-auto w-full lg:max-w-none">
+        
+        {/* Top: Logo Sakuwise */}
+        <div className="flex items-center justify-between">
+          <Link href="/" className="inline-block transition-transform duration-200 hover:scale-[1.01]">
+            <Logo size="md" />
+          </Link>
+          {/* Mobile Back Link */}
+          <Link
+            href="/"
+            className="lg:hidden inline-flex items-center gap-1.5 text-xs font-semibold text-[#5B6D60] hover:text-[#1E3A2B]"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Beranda</span>
+          </Link>
+        </div>
 
-      {/* Top bar with back to home link */}
-      <div className="max-w-6xl mx-auto w-full flex items-center justify-between z-10">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#5B6D60] hover:text-[#1E3A2B] transition-colors py-2 px-3 rounded-lg hover:bg-black/[0.03]"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Kembali ke Beranda</span>
-        </Link>
-
-        <span className="text-xs text-[#7A8B7E] hidden sm:inline-block">
-          Sakuwise Cloud Secure Auth
-        </span>
-      </div>
-
-      {/* Center Card Container */}
-      <div className="my-auto max-w-md w-full mx-auto z-10 py-4">
-        <div className="bg-white rounded-3xl p-7 sm:p-9 shadow-[0_16px_40px_-12px_rgba(30,58,43,0.08)] border border-[#E7EDE7] text-left relative">
+        {/* Center: Main Login Form */}
+        <div className="my-auto py-8 sm:py-12 max-w-md w-full mx-auto">
           
-          {/* Logo Sakuwise Resmi (lowercase + tagline) */}
-          <div className="flex justify-center mb-5">
-            <Link href="/" className="inline-block">
-              <Logo size="md" />
-            </Link>
-          </div>
-
-          {/* Heading & Supporting text */}
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-extrabold text-[#1E3A2B] tracking-tight">
-              {mode === "login" ? "Selamat Datang Kembali" : "Buat Akun Sakuwise"}
+          {/* Header Title */}
+          <div className="mb-8">
+            <span className="text-[11px] font-bold text-[#7A8E80] tracking-widest uppercase block mb-1.5">
+              {mode === "login" ? "SELAMAT DATANG KEMBALI" : "MULAI PERJALANANMU"}
+            </span>
+            <h1 className="text-3xl sm:text-[34px] font-extrabold text-[#1E3A2B] tracking-tight leading-tight">
+              {mode === "login" ? "Masuk ke Sakuwise" : "Daftar Akun Sakuwise"}
             </h1>
-            <p className="mt-1 text-xs text-[#5B6D60] leading-relaxed max-w-xs mx-auto">
-              Kelola keuangan bulananmu dengan lebih bijak, terarah, dan terintegrasi.
+            <p className="mt-2 text-sm text-[#5B6D60] leading-relaxed">
+              {mode === "login"
+                ? "Lanjutkan rencana baik untuk keuanganmu."
+                : "Kelola keuangan pribadi lebih terarah tanpa biaya."}
             </p>
-          </div>
-
-          {/* Mode Switcher Tab (Masuk vs Daftar Baru) */}
-          <div className="flex bg-[#F2F6F3] p-1 rounded-xl mb-6 border border-[#E2EBE4]">
-            <button
-              type="button"
-              onClick={() => {
-                setMode("login");
-                setErrorMessage(null);
-              }}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                mode === "login"
-                  ? "bg-white text-[#1E3A2B] shadow-2xs"
-                  : "text-[#627566] hover:text-[#1E3A2B]"
-              }`}
-            >
-              Masuk (Login)
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setMode("signup");
-                setErrorMessage(null);
-              }}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                mode === "signup"
-                  ? "bg-white text-[#1E3A2B] shadow-2xs"
-                  : "text-[#627566] hover:text-[#1E3A2B]"
-              }`}
-            >
-              Daftar Baru (Sign Up)
-            </button>
           </div>
 
           {/* Error Message Alert */}
           {errorMessage && (
-            <div className="mb-5 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2 animate-in fade-in duration-150">
+            <div className="mb-6 p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2.5 animate-in fade-in duration-150">
               <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
-              <div className="flex-1 font-medium">{errorMessage}</div>
+              <div className="flex-1 font-medium leading-relaxed">{errorMessage}</div>
             </div>
           )}
 
-          {/* Form Credentials (Email & Password) */}
+          {/* Form Credentials */}
           <form onSubmit={handleSubmit} className="space-y-4">
+            
+            {/* Name field only in signup mode */}
             {mode === "signup" && (
               <div>
-                <label className="text-[11px] font-bold text-[#677C6D] uppercase tracking-wider block mb-1">
-                  Nama Lengkap
+                <label className="text-xs font-bold text-[#1E3A2B] block mb-1.5">
+                  Nama lengkap
                 </label>
                 <div className="relative">
-                  <UserIcon className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <UserIcon className="w-4 h-4 text-[#8C9E91] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     required
-                    placeholder="Contoh: Najwa / Dimas"
+                    placeholder="Contoh: Najwa"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#D5E1D7] text-xs font-semibold text-[#1E3A2B] focus:outline-none focus:border-[#224431] bg-[#FAF8F5] focus:bg-white transition-all"
+                    className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-[#D5E1D7] text-xs sm:text-sm font-medium text-[#1E3A2B] focus:outline-none focus:border-[#224431] focus:ring-1 focus:ring-[#224431] bg-[#FAF8F5]/60 focus:bg-white transition-all"
                   />
                 </div>
               </div>
             )}
 
+            {/* Email / Username field */}
             <div>
-              <label className="text-[11px] font-bold text-[#677C6D] uppercase tracking-wider block mb-1">
-                Alamat Email
+              <label className="text-xs font-bold text-[#1E3A2B] block mb-1.5">
+                Email atau nama pengguna
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <UserIcon className="w-4 h-4 text-[#8C9E91] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
-                  type="email"
+                  type="text"
                   required
-                  placeholder="nama@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#D5E1D7] text-xs font-semibold text-[#1E3A2B] focus:outline-none focus:border-[#224431] bg-[#FAF8F5] focus:bg-white transition-all"
+                  placeholder="Masukkan email atau nama pengguna"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-[#D5E1D7] text-xs sm:text-sm font-medium text-[#1E3A2B] focus:outline-none focus:border-[#224431] focus:ring-1 focus:ring-[#224431] bg-[#FAF8F5]/60 focus:bg-white transition-all"
                 />
               </div>
             </div>
 
+            {/* Password field */}
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="text-[11px] font-bold text-[#677C6D] uppercase tracking-wider">
-                  Kata Sandi
-                </label>
-                {mode === "login" && (
-                  <button
-                    type="button"
-                    onClick={() => alert("Silakan gunakan akun demo atau daftar akun baru.")}
-                    className="text-[11px] text-[#244833] font-semibold hover:underline cursor-pointer"
-                  >
-                    Lupa sandi?
-                  </button>
-                )}
-              </div>
+              <label className="text-xs font-bold text-[#1E3A2B] block mb-1.5">
+                Kata sandi
+              </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 text-[#8C9E91] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type={showPassword ? "text" : "password"}
                   required
-                  placeholder="Minimal 6 karakter"
+                  placeholder="Masukkan kata sandi"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#D5E1D7] text-xs font-semibold text-[#1E3A2B] focus:outline-none focus:border-[#224431] bg-[#FAF8F5] focus:bg-white transition-all"
+                  className="w-full pl-10 pr-10 py-3 rounded-xl border border-[#D5E1D7] text-xs sm:text-sm font-medium text-[#1E3A2B] focus:outline-none focus:border-[#224431] focus:ring-1 focus:ring-[#224431] bg-[#FAF8F5]/60 focus:bg-white transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8C9E91] hover:text-[#1E3A2B] focus:outline-none cursor-pointer"
+                  aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
+            {/* Options Row: Ingat saya & Lupa kata sandi */}
+            {mode === "login" && (
+              <div className="flex items-center justify-between pt-1">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="w-4 h-4 rounded border-[#CBD8CE] text-[#224431] accent-[#224431] cursor-pointer"
+                  />
+                  <span className="text-xs text-[#5B6D60]">Ingat saya</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => alert("Silakan gunakan tombol akun demo atau masukkan email/kata sandi Anda.")}
+                  className="text-xs text-[#224431] font-semibold hover:underline cursor-pointer"
+                >
+                  Lupa kata sandi?
+                </button>
+              </div>
+            )}
+
             {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] transition-all shadow-sm hover:shadow active:scale-[0.99] cursor-pointer disabled:opacity-70 mt-2"
+              className="w-full py-3.5 px-4 rounded-xl text-sm font-bold text-white bg-[#224431] hover:bg-[#183526] transition-all duration-200 shadow-sm hover:shadow active:scale-[0.99] cursor-pointer disabled:opacity-70 mt-3"
             >
               {isLoading ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
               ) : mode === "login" ? (
-                "Masuk ke Akun"
+                "Masuk"
               ) : (
-                "Daftar Akun Baru"
+                "Daftar Sekarang"
               )}
             </button>
           </form>
 
-          {/* Divider "Atau masuk dengan" */}
-          <div className="relative my-6 text-center">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#E8ECE8]" />
-            </div>
-            <span className="relative bg-white px-3 text-[11px] font-medium text-[#7A8E80]">
-              atau lanjutkan dengan
-            </span>
+          {/* Toggle Login / Sign Up */}
+          <div className="mt-6 text-center">
+            {mode === "login" ? (
+              <p className="text-xs text-[#5B6D60]">
+                Belum punya akun?{" "}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("signup");
+                    setErrorMessage(null);
+                  }}
+                  className="font-bold text-[#224431] hover:underline cursor-pointer"
+                >
+                  Daftar gratis
+                </button>
+              </p>
+            ) : (
+              <p className="text-xs text-[#5B6D60]">
+                Sudah punya akun?{" "}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("login");
+                    setErrorMessage(null);
+                  }}
+                  className="font-bold text-[#224431] hover:underline cursor-pointer"
+                >
+                  Masuk di sini
+                </button>
+              </p>
+            )}
           </div>
 
-          {/* Continue with Google Button */}
-          <button
-            type="button"
-            onClick={handleGoogleAuth}
-            disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-xs font-semibold text-[#1E3A2B] bg-white border border-[#D3DDD5] hover:bg-[#F9FAF9] hover:border-[#224431]/40 shadow-2xs hover:shadow transition-all duration-200 cursor-pointer disabled:opacity-70 group"
-          >
-            <GoogleIcon className="w-4 h-4 group-hover:scale-105 transition-transform" />
-            <span>Continue with Google</span>
-          </button>
-
-          {/* Quick Demo Fill Pill (Akun Demo Najwa) */}
-          <div className="mt-5 pt-4 border-t border-[#F2F5F2] text-center">
+          {/* Quick Demo Pill Helper */}
+          <div className="mt-8 pt-6 border-t border-[#F0F4F1] text-center">
             <button
               type="button"
               onClick={handleQuickDemo}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold text-[#20743E] bg-[#E7F6EC] hover:bg-[#D4EEDC] border border-[#C6E6D0] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#20743E] bg-[#E7F6EC] hover:bg-[#D4EEDC] border border-[#C6E6D0] transition-colors cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#E08C38] fill-[#E08C38]" />
               <span>Gunakan Akun Demo (Najwa · 1 Klik)</span>
             </button>
           </div>
 
-          {/* Trust note */}
-          <div className="mt-4 flex items-center justify-center gap-1.5 text-[10px] text-[#788B7D]">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#20743E]" />
-            <span>Enkripsi kata sandi & otorisasi akun terproteksi</span>
+        </div>
+
+        {/* Bottom: Left Footer Links & Copyright */}
+        <div className="pt-6 border-t border-[#F0F4F1] flex flex-col sm:flex-row items-center justify-between text-xs text-[#7A8E80] gap-3">
+          <div className="flex items-center gap-4">
+            <a href="#privasi" className="hover:text-[#1E3A2B] transition-colors">
+              Kebijakan Privasi
+            </a>
+            <span>•</span>
+            <a href="#syarat" className="hover:text-[#1E3A2B] transition-colors">
+              Syarat & Ketentuan
+            </a>
+          </div>
+          <p>© 2026 Sakuwise. Semua hak dilindungi.</p>
+        </div>
+
+      </div>
+
+      {/* ================= RIGHT COLUMN: VISUAL SHOWCASE ================= */}
+      <div className="hidden lg:flex flex-col justify-between bg-[#FAF8F5] border-l border-[#EBEFEA] p-10 lg:p-14 relative overflow-hidden">
+        
+        {/* Top Right: Link Kembali ke Beranda */}
+        <div className="flex justify-end">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-[#5B6D60] hover:text-[#1E3A2B] transition-colors py-2 px-3 rounded-lg hover:bg-black/[0.03]"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Kembali ke beranda</span>
+          </Link>
+        </div>
+
+        {/* Center: Showcase Hero Card & Headlines */}
+        <div className="my-auto max-w-lg w-full mx-auto py-6">
+          
+          {/* Pill Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FEF3E2] border border-[#FDE5C5] text-xs font-bold text-[#9A5B15] mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E08C38]" />
+            <span>Satu langkah bijak setiap hari.</span>
+          </div>
+
+          {/* Headline Text */}
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E3A2B] tracking-tight leading-tight">
+            Uang lebih terarah. <br />
+            Hidup lebih tenang.
+          </h2>
+
+          <p className="mt-2.5 text-sm text-[#5B6D60] leading-relaxed mb-8">
+            Semua saku, rencana, dan tujuanmu di satu tempat.
+          </p>
+
+          {/* Hero Card Preview Mockup */}
+          <div className="w-full">
+            <HeroDashboardMockup />
           </div>
 
         </div>
+
+        {/* Bottom Right: Tagline */}
+        <div className="flex justify-start pt-6 border-t border-[#EBEFEA]/70">
+          <span className="text-xs text-[#7A8E80] font-medium tracking-tight">
+            Manage your money, wisely.
+          </span>
+        </div>
+
       </div>
 
-      {/* Footer simple */}
-      <div className="max-w-md mx-auto w-full text-center text-xs text-[#8A9B8D] z-10 pb-2">
-        © 2026 Sakuwise. Saku cerdas untuk generasi bijak.
-      </div>
     </div>
   );
 }

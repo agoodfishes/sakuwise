@@ -60,11 +60,6 @@ export default function Footer() {
                   Target Tabungan
                 </a>
               </li>
-              <li>
-                <a href="#harga" className="hover:text-white transition-colors">
-                  Harga
-                </a>
-              </li>
             </ul>
           </div>
 
