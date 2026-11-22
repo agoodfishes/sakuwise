@@ -222,7 +222,7 @@ export default function BillsView() {
                       >
                         {dueLabel(b)}
                       </p>
-                      <span className="inline-block mt-1 text-[10px] font-medium bg-[#FAF8F5] border border-[#E4ECE4] px-2 py-0.5 rounded-md text-[#55695C]">
+                      <span className="inline-block mt-1 text-[11px] font-medium bg-[#FAF8F5] border border-[#E4ECE4] px-2 py-0.5 rounded-md text-[#55695C]">
                         {b.category}
                       </span>
                     </div>
@@ -231,7 +231,7 @@ export default function BillsView() {
                   <div className="text-right">
                     <p className="text-base font-extrabold text-[#1E3A2B]">{formatRupiah(b.amount)}</p>
                     <span
-                      className={`inline-block mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                      className={`inline-block mt-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${
                         b.paid
                           ? "bg-[#E7F6EC] text-[#20743E]"
                           : b.overdue

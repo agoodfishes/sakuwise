@@ -210,7 +210,7 @@ export default function AddExpenseModal({ isOpen, onClose }: AddExpenseModalProp
               </button>
             </div>
 
-            <p className="text-[10px] text-center text-[#7E8F82]">
+            <p className="text-[11px] text-center text-[#7E8F82]">
               Required: amount, description, and category.
             </p>
           </form>

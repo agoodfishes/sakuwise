@@ -140,7 +140,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
               {/* Daily spending limit figure */}
               <div className="sm:col-span-6">
-                <span className="text-[10px] font-bold text-[#6D8072] uppercase tracking-wider">
+                <span className="text-[11px] font-bold text-[#6D8072] uppercase tracking-wider">
                   DAILY SPENDING LIMIT
                 </span>
                 <p className="text-3xl sm:text-4xl font-extrabold text-[#1E3A2B] tracking-tight mt-0.5">
@@ -185,7 +185,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
                           d.isToday ? "bg-[#E08C38]" : d.total > 0 ? "bg-[#4D7A5E]" : "bg-[#CFDDD3]"
                         }`}
                       />
-                      <span className="text-[10px] text-[#6F8274] font-medium">{d.day}</span>
+                      <span className="text-[11px] text-[#6F8274] font-medium">{d.day}</span>
                     </div>
                   ))}
                 </div>
@@ -232,7 +232,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
               <span>Ask your AI assistant</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
-            <span className="text-[10px] text-[#7E8F82]">Guidance based on your recorded expenses.</span>
+            <span className="text-[11px] text-[#7E8F82]">Guidance based on your recorded expenses.</span>
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#F0F4F0] text-[10px] font-bold uppercase tracking-wider text-[#7A8E80]">
+                  <tr className="border-b border-[#F0F4F0] text-[11px] font-bold uppercase tracking-wider text-[#7A8E80]">
                     <th className="pb-3 font-semibold">Transaction</th>
                     <th className="pb-3 font-semibold">Category</th>
                     <th className="pb-3 font-semibold text-right">Amount</th>
@@ -287,11 +287,11 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
                       <tr key={t.id} className="group hover:bg-[#FAF8F5] transition-colors">
                         <td className="py-3 pr-4">
                           <p className="font-semibold text-[#1E3A2B] text-xs">{t.name}</p>
-                          <p className="text-[10px] text-[#7D9183]">{describeDate(t.date, today)}</p>
+                          <p className="text-[11px] text-[#7D9183]">{describeDate(t.date, today)}</p>
                         </td>
                         <td className="py-3 pr-4">
                           <span
-                            className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-medium ${badgeStyle.bg} ${badgeStyle.text}`}
+                            className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium ${badgeStyle.bg} ${badgeStyle.text}`}
                           >
                             {t.category}
                           </span>
@@ -343,7 +343,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
                       </div>
                       <div>
                         <p className="text-xs font-bold text-[#1E3A2B]">{b.name}</p>
-                        <p className={`text-[10px] ${b.overdue ? "text-[#B4491F]" : "text-[#718576]"}`}>
+                        <p className={`text-[11px] ${b.overdue ? "text-[#B4491F]" : "text-[#718576]"}`}>
                           {dueLabel(b.daysUntil, b.dueDate)}
                         </p>
                       </div>

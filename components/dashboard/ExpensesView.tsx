@@ -262,7 +262,7 @@ export default function ExpensesView() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#F0F4F0] text-[10px] font-bold uppercase tracking-wider text-[#7A8E80]">
+                  <tr className="border-b border-[#F0F4F0] text-[11px] font-bold uppercase tracking-wider text-[#7A8E80]">
                     <th className="pb-3">Transaction</th>
                     <th className="pb-3">Category</th>
                     <th className="pb-3 text-right">Amount</th>
@@ -279,14 +279,14 @@ export default function ExpensesView() {
                       <tr key={t.id} className="group hover:bg-[#FAF8F5] transition-colors">
                         <td className="py-3.5 pr-4">
                           <p className="font-semibold text-[#1E3A2B]">{t.name}</p>
-                          <p className="text-[10px] text-[#7E9184]">
+                          <p className="text-[11px] text-[#7E9184]">
                             {describeDate(t.date, today)}
                             {t.note ? ` - ${t.note}` : ""}
                           </p>
                         </td>
                         <td className="py-3.5 pr-4">
                           <span
-                            className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-medium ${badgeStyle.bg} ${badgeStyle.text}`}
+                            className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium ${badgeStyle.bg} ${badgeStyle.text}`}
                           >
                             {t.category}
                           </span>
@@ -457,7 +457,7 @@ export default function ExpensesView() {
                   </button>
                 </div>
 
-                <p className="text-[10px] text-[#869689] text-center">
+                <p className="text-[11px] text-[#869689] text-center">
                   Required: amount, description, and category.
                 </p>
               </form>

@@ -258,7 +258,7 @@ export default function AIAssistantView() {
                 >
                   <p className="whitespace-pre-line">{m.text}</p>
                   <span
-                    className={`text-[10px] block mt-1.5 ${
+                    className={`text-[11px] block mt-1.5 ${
                       isAi ? "text-[#7B8F80]" : "text-emerald-200/80"
                     }`}
                   >

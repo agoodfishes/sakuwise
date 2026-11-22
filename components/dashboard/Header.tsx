@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Menu, Calendar, Plus, Bell } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useFinance, formatRupiah, parseISODate, isDemoAccount } from "@/context/FinanceContext";
@@ -29,6 +29,26 @@ export default function Header({
   const { today, periodStart, dueSoonBills } = summary;
   const userName = user?.name || "Najwa";
   const [bellOpen, setBellOpen] = useState(false);
+  const bellRef = useRef<HTMLDivElement>(null);
+
+  // Close the notification dropdown on outside click or Escape
+  useEffect(() => {
+    if (!bellOpen) return;
+    const onPointerDown = (e: MouseEvent) => {
+      if (bellRef.current && !bellRef.current.contains(e.target as Node)) {
+        setBellOpen(false);
+      }
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setBellOpen(false);
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [bellOpen]);
 
   // Notification preferences from Settings; refreshed whenever they are saved
   const [prefs, setPrefs] = useState<Preferences>(() => loadPrefs(user?.email));
@@ -153,7 +173,7 @@ export default function Header({
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         {/* Left: Breadcrumb & Title */}
         <div>
-          <p className="text-[10px] font-bold tracking-widest uppercase text-[#738777]">
+          <p className="text-[11px] font-bold tracking-widest uppercase text-[#738777]">
             {getBreadcrumb()}
           </p>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E3A2B] tracking-tight mt-1">
@@ -175,7 +195,7 @@ export default function Header({
           </span>
 
           {/* Notification Bell */}
-          <div className="relative">
+          <div className="relative" ref={bellRef}>
             <button
               type="button"
               onClick={() => setBellOpen((v) => !v)}
@@ -202,13 +222,13 @@ export default function Header({
                     {showDailyReminder && (
                       <li className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E9EFEA]">
                         <p className="text-xs font-bold text-[#1E3A2B]">Log today&apos;s spending</p>
-                        <p className="text-[10px] text-[#718576]">No expenses recorded yet today.</p>
+                        <p className="text-[11px] text-[#718576]">No expenses recorded yet today.</p>
                       </li>
                     )}
                     {budgetWarnings.map((c) => (
                       <li key={c.id} className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E9EFEA]">
                         <p className="text-xs font-bold text-[#1E3A2B]">{c.name} budget</p>
-                        <p className={`text-[10px] ${c.over ? "text-[#B4491F] font-semibold" : "text-[#718576]"}`}>
+                        <p className={`text-[11px] ${c.over ? "text-[#B4491F] font-semibold" : "text-[#718576]"}`}>
                           {c.over ? "Over budget" : `${c.percent}% used`} Â· {formatRupiah(c.spent)} of {formatRupiah(c.budget)}
                         </p>
                       </li>
@@ -221,7 +241,7 @@ export default function Header({
                         <div>
                           <p className="text-xs font-bold text-[#1E3A2B]">{b.name}</p>
                           <p
-                            className={`text-[10px] ${
+                            className={`text-[11px] ${
                               b.overdue ? "text-[#B4491F] font-semibold" : "text-[#718576]"
                             }`}
                           >

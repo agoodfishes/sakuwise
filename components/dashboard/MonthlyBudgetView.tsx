@@ -19,7 +19,6 @@ interface Notice {
 export default function MonthlyBudgetView() {
   const {
     income,
-    categories,
     setIncome,
     setNextAllowanceDate,
     addCategory,
@@ -250,7 +249,7 @@ export default function MonthlyBudgetView() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#F0F4F0] text-[10px] font-bold uppercase tracking-wider text-[#7A8E80]">
+                  <tr className="border-b border-[#F0F4F0] text-[11px] font-bold uppercase tracking-wider text-[#7A8E80]">
                     <th className="pb-3">Category</th>
                     <th className="pb-3">Monthly Budget</th>
                     <th className="pb-3">Spent</th>
@@ -268,7 +267,7 @@ export default function MonthlyBudgetView() {
                           />
                           <div>
                             <p className="font-bold text-[#1E3A2B]">{c.name}</p>
-                            <p className="text-[10px] text-[#788B7D]">{c.desc}</p>
+                            <p className="text-[11px] text-[#788B7D]">{c.desc}</p>
                           </div>
                         </div>
                       </td>
@@ -476,7 +475,7 @@ export default function MonthlyBudgetView() {
 
           <div className="flex flex-wrap items-center gap-6 sm:gap-10">
             <div>
-              <p className="text-[10px] uppercase font-bold text-[#7A8E80]">Remaining balance</p>
+              <p className="text-[11px] uppercase font-bold text-[#7A8E80]">Remaining balance</p>
               <p className="text-xl sm:text-2xl font-extrabold text-[#1E3A2B]">
                 {formatRupiah(Math.max(0, balanceAtDayStart))}
               </p>
@@ -485,7 +484,7 @@ export default function MonthlyBudgetView() {
             <div className="text-gray-300 font-light text-xl hidden sm:block">&divide;</div>
 
             <div>
-              <p className="text-[10px] uppercase font-bold text-[#7A8E80]">Days until allowance</p>
+              <p className="text-[11px] uppercase font-bold text-[#7A8E80]">Days until allowance</p>
               <p className="text-xl sm:text-2xl font-extrabold text-[#1E3A2B]">
                 {daysLeft} {daysLeft === 1 ? "day" : "days"}
               </p>
@@ -494,7 +493,7 @@ export default function MonthlyBudgetView() {
             <div className="text-gray-300 font-light text-xl hidden sm:block">=</div>
 
             <div>
-              <p className="text-[10px] uppercase font-bold text-[#7A8E80]">Daily spending limit</p>
+              <p className="text-[11px] uppercase font-bold text-[#7A8E80]">Daily spending limit</p>
               <p className="text-xl sm:text-2xl font-extrabold text-[#20743E]">{formatRupiah(dailyLimit)}</p>
             </div>
           </div>

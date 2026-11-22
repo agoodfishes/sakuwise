@@ -47,7 +47,7 @@ export default function SettingsView() {
           <div>
             <p className="text-sm font-bold text-[#1E3A2B]">{user?.name || "Najwa"}</p>
             <p className="text-xs text-[#718576]">{user?.email || "najwa.finance@student.ac.id"}</p>
-            <span className="inline-block mt-1 text-[10px] font-semibold bg-[#E8EFEA] text-[#244833] px-2 py-0.5 rounded-full">
+            <span className="inline-block mt-1 text-[11px] font-semibold bg-[#E8EFEA] text-[#244833] px-2 py-0.5 rounded-full">
               {user?.role || "Student account"} Â· {isGoogle ? "Google OAuth" : "Email & kata sandi"}
             </span>
           </div>
