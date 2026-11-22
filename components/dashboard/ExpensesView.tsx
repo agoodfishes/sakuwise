@@ -11,6 +11,7 @@ import {
   addDays,
   todayISO,
 } from "@/context/FinanceContext";
+import { exportTransactionsXlsx } from "@/lib/exportTransactions";
 
 const PAGE_SIZE = 10;
 
@@ -22,11 +23,6 @@ const categoryBadges: Record<string, { bg: string; text: string }> = {
   Accommodation: { bg: "bg-[#EAE8F2]", text: "text-[#4B3B70]" },
   "Emergency fund": { bg: "bg-[#F8EFEA]", text: "text-[#7D452B]" },
 };
-
-function csvCell(value: string | number): string {
-  const s = String(value);
-  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-}
 
 export default function ExpensesView() {
   const { income, transactions, categories, addTransaction, deleteTransaction, summary } =
@@ -118,19 +114,24 @@ export default function ExpensesView() {
   const startIdx = (safePage - 1) * PAGE_SIZE;
   const visible = filtered.slice(startIdx, startIdx + PAGE_SIZE);
 
-  const handleExport = () => {
-    const header = ["Date", "Description", "Category", "Amount (IDR)", "Note"];
-    const rows = filtered.map((t) => [t.date, t.name, t.category, t.amount, t.note ?? ""]);
-    const csv = [header, ...rows].map((r) => r.map(csvCell).join(",")).join("\n");
-    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `sakuwise-transactions-${today}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const handleExport = async () => {
+    if (filtered.length === 0) return;
+    const year = parseISODate(nextAllowanceDate).getFullYear();
+    const periodLabel =
+      period === "all"
+        ? "Semua waktu"
+        : period === "week"
+          ? "7 hari terakhir (sampai " + formatShortDate(today) + ")"
+          : formatShortDate(periodStart) + " - " + formatShortDate(addDays(nextAllowanceDate, -1)) + " " + year;
+    const notes: string[] = [];
+    if (selectedCategory !== "all") notes.push("Kategori: " + selectedCategory);
+    if (searchTerm.trim()) notes.push("Pencarian: " + searchTerm.trim());
+    await exportTransactionsXlsx({
+      transactions: filtered,
+      periodLabel,
+      filterNote: notes.join(", ") || undefined,
+      fileDate: today,
+    });
   };
 
   const handleDelete = (id: string, name: string) => {
@@ -195,7 +196,7 @@ export default function ExpensesView() {
               disabled={filtered.length === 0}
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1E3A2B] hover:text-[#0F2218] transition-colors cursor-pointer self-start sm:self-auto disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <span>Export CSV</span>
+              <span>Export Excel</span>
               <Download className="w-3.5 h-3.5" />
             </button>
           </div>

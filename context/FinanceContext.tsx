@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 // ---------- Types ----------
 
@@ -128,6 +129,17 @@ export interface FinanceSummary {
 // ---------- Date and format helpers ----------
 
 const STORAGE_KEY = 'sakuwise_finance_v1';
+// Accounts that start with the sample (demo) data. Empty on purpose: every account starts blank
+// and fills in its own data. Add an email here to bring back the sample data for that account.
+const DEMO_EMAILS: string[] = [];
+
+// Fixed date used only until the real date is read on the client. Calling new Date() while
+// prerendering is not allowed with Cache Components, and nothing is shown until the real data loads.
+const PLACEHOLDER_DATE = '2000-01-01';
+
+export function isDemoAccount(email?: string | null): boolean {
+  return !!email && DEMO_EMAILS.includes(email.trim().toLowerCase());
+}
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const GOAL_COLORS = ['bg-[#244833]', 'bg-[#E08C38]', 'bg-[#3D644C]', 'bg-[#6B8F71]'];
 
@@ -259,10 +271,24 @@ function createSeed(today: string): FinanceData {
   };
 }
 
-function loadData(today: string): FinanceData {
+// Empty data for new accounts: default categories with no budget yet, no transactions, bills or goals
+function createBlank(today: string): FinanceData {
   const seed = createSeed(today);
+  return {
+    income: 0,
+    nextAllowanceDate: seed.nextAllowanceDate,
+    categories: seed.categories.map((c) => ({ ...c, budget: 0 })),
+    transactions: [],
+    bills: [],
+    goals: [],
+  };
+}
+
+function loadData(today: string, storageKey: string, demo: boolean): FinanceData {
+  const seed = demo ? createSeed(today) : createBlank(today);
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    // Demo accounts can still pick up data saved under the old shared key
+    const raw = localStorage.getItem(storageKey) ?? (demo ? localStorage.getItem(STORAGE_KEY) : null);
     if (raw) {
       const p = JSON.parse(raw) as Partial<FinanceData>;
       return {
@@ -376,30 +402,36 @@ interface FinanceContextType extends FinanceData {
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
 
 export function FinanceProvider({ children }: { children: React.ReactNode }) {
-  const [today, setToday] = useState<string>(() => todayISO());
-  const [data, setData] = useState<FinanceData>(() => createSeed(todayISO()));
-  const [ready, setReady] = useState(false);
+  const [today, setToday] = useState<string>(PLACEHOLDER_DATE);
+  const [data, setData] = useState<FinanceData>(() => createSeed(PLACEHOLDER_DATE));
+  const { user } = useAuth();
+  const email = user?.email?.trim().toLowerCase() ?? null;
+  const storageKey = email ? `${STORAGE_KEY}:${email}` : null;
+  // The key whose data is currently loaded; data is only ready (and saved) for the signed-in account
+  const [loadedKey, setLoadedKey] = useState<string | null>(null);
+  const ready = storageKey !== null && loadedKey === storageKey;
 
   // Load saved data from localStorage (deferred so setState is not called synchronously in the effect)
   useEffect(() => {
+    if (!email || !storageKey) return;
     const timer = setTimeout(() => {
       const now = todayISO();
       setToday(now);
-      setData(loadData(now));
-      setReady(true);
+      setData(loadData(now, storageKey, isDemoAccount(email)));
+      setLoadedKey(storageKey);
     }, 0);
     return () => clearTimeout(timer);
-  }, []);
+  }, [email, storageKey]);
 
   // Persist every change after the first load
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || !storageKey) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      localStorage.setItem(storageKey, JSON.stringify(data));
     } catch (e) {
       console.error('Failed to save finance data', e);
     }
-  }, [data, ready]);
+  }, [data, ready, storageKey]);
 
   // Keep today accurate if the tab stays open past midnight
   useEffect(() => {
@@ -580,7 +612,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
   };
 
   const resetData = () => {
-    setData(createSeed(today));
+    setData(isDemoAccount(email) ? createSeed(today) : createBlank(today));
   };
 
   // Render nothing until saved data is loaded, so server and client output never differ

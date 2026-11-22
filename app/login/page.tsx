@@ -12,7 +12,6 @@ import {
   Eye,
   EyeOff,
   AlertCircle,
-  Sparkles,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -25,14 +24,6 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  // 1-Click Demo Fill
-  const handleQuickDemo = async () => {
-    setErrorMessage(null);
-    setIdentifier("najwa.finance@student.ac.id");
-    setPassword("password123");
-    await loginWithEmail("najwa.finance@student.ac.id", "password123");
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +40,7 @@ export default function LoginPage() {
         ? identifier.trim()
         : `${identifier.trim().toLowerCase()}@sakuwise.id`;
 
-      const res = await loginWithEmail(emailValue, password);
+      const res = await loginWithEmail(emailValue, password, rememberMe);
       if (!res.success && res.error) {
         setErrorMessage(res.error);
       }
@@ -194,7 +185,7 @@ export default function LoginPage() {
                 </label>
                 <button
                   type="button"
-                  onClick={() => alert("Silakan gunakan tombol akun demo atau masukkan email/kata sandi Anda.")}
+                  onClick={() => alert("Fitur atur ulang kata sandi belum tersedia. Jika lupa, daftar dengan email baru.")}
                   className="text-xs text-[#224431] font-semibold hover:underline cursor-pointer"
                 >
                   Lupa kata sandi?
@@ -249,18 +240,6 @@ export default function LoginPage() {
                 </button>
               </p>
             )}
-          </div>
-
-          {/* Quick Demo Pill Helper */}
-          <div className="mt-8 pt-6 border-t border-[#F0F4F1] text-center">
-            <button
-              type="button"
-              onClick={handleQuickDemo}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#20743E] bg-[#E7F6EC] hover:bg-[#D4EEDC] border border-[#C6E6D0] transition-colors cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#E08C38] fill-[#E08C38]" />
-              <span>Gunakan Akun Demo (Najwa · 1 Klik)</span>
-            </button>
           </div>
 
         </div>

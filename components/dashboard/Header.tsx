@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, Calendar, Plus, Bell } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { useFinance, formatRupiah, parseISODate } from "@/context/FinanceContext";
+import { useFinance, formatRupiah, parseISODate, isDemoAccount } from "@/context/FinanceContext";
+import { loadPrefs, PREFS_EVENT, type Preferences } from "@/lib/preferences";
 
 interface HeaderProps {
   activeTab: string;
@@ -28,6 +29,21 @@ export default function Header({
   const { today, periodStart, dueSoonBills } = summary;
   const userName = user?.name || "Najwa";
   const [bellOpen, setBellOpen] = useState(false);
+
+  // Notification preferences from Settings; refreshed whenever they are saved
+  const [prefs, setPrefs] = useState<Preferences>(() => loadPrefs(user?.email));
+  useEffect(() => {
+    const refresh = () => setPrefs(loadPrefs(user?.email));
+    window.addEventListener(PREFS_EVENT, refresh);
+    return () => window.removeEventListener(PREFS_EVENT, refresh);
+  }, [user?.email]);
+
+  const budgetWarnings = prefs.budgetAlerts
+    ? summary.categoryStats.filter((c) => c.budget > 0 && c.percent >= 85)
+    : [];
+  const showDailyReminder = prefs.dailyReminder && summary.spentToday === 0;
+  const notificationCount =
+    dueSoonBills.length + budgetWarnings.length + (showDailyReminder ? 1 : 0);
 
   const monthLabel = parseISODate(periodStart).toLocaleDateString("en-US", {
     month: "long",
@@ -150,7 +166,7 @@ export default function Header({
         <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
           {/* Sample Data Pill */}
           <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium text-[#496251] bg-[#E8EFEA] border border-[#D5E1D7]">
-            Sample data
+            {isDemoAccount(user?.email) ? "Sample data" : "Your data"}
           </span>
 
           {/* Current Date */}
@@ -169,20 +185,34 @@ export default function Header({
               aria-expanded={bellOpen}
             >
               <Bell className="w-4 h-4" />
-              {dueSoonBills.length > 0 && (
+              {notificationCount > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-[#E08C38] text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-white">
-                  {dueSoonBills.length}
+                  {notificationCount}
                 </span>
               )}
             </button>
 
             {bellOpen && (
               <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-[#E1E9E2] shadow-xl p-4 z-40">
-                <p className="text-xs font-bold text-[#1E3A2B] mb-2">Bill reminders</p>
-                {dueSoonBills.length === 0 ? (
-                  <p className="text-xs text-[#718576]">Nothing due in the next 3 days.</p>
+                <p className="text-xs font-bold text-[#1E3A2B] mb-2">Reminders</p>
+                {notificationCount === 0 ? (
+                  <p className="text-xs text-[#718576]">No reminders right now.</p>
                 ) : (
                   <ul className="space-y-2">
+                    {showDailyReminder && (
+                      <li className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E9EFEA]">
+                        <p className="text-xs font-bold text-[#1E3A2B]">Log today&apos;s spending</p>
+                        <p className="text-[10px] text-[#718576]">No expenses recorded yet today.</p>
+                      </li>
+                    )}
+                    {budgetWarnings.map((c) => (
+                      <li key={c.id} className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E9EFEA]">
+                        <p className="text-xs font-bold text-[#1E3A2B]">{c.name} budget</p>
+                        <p className={`text-[10px] ${c.over ? "text-[#B4491F] font-semibold" : "text-[#718576]"}`}>
+                          {c.over ? "Over budget" : `${c.percent}% used`} Â· {formatRupiah(c.spent)} of {formatRupiah(c.budget)}
+                        </p>
+                      </li>
+                    ))}
                     {dueSoonBills.map((b) => (
                       <li
                         key={b.id}

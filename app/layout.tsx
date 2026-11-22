@@ -37,7 +37,11 @@ export default function RootLayout({
 }) {
   return React.createElement(
     "html",
-    { lang: "id", className: `${plusJakartaSans.variable} scroll-smooth` },
+    {
+      lang: "id",
+      className: `${plusJakartaSans.variable} scroll-smooth`,
+      "data-scroll-behavior": "smooth",
+    },
     React.createElement(
       "body",
       {
