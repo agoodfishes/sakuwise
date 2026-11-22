@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 
 interface LogoProps {
   className?: string;
@@ -28,10 +27,6 @@ export default function Logo({
         src="/logo.png"
         alt="Sakuwise - Manage your money, wisely"
         className={`${sizeClasses[size]} w-auto object-contain transition-transform duration-200 hover:scale-[1.02]`}
-        onError={(e) => {
-          // Fallback to SVG if PNG fails
-          (e.currentTarget as HTMLImageElement).src = "/logo.svg";
-        }}
       />
     </div>
   );

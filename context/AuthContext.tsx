@@ -53,31 +53,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Load existing session & registered accounts from localStorage
   useEffect(() => {
-    try {
-      // 1. Load active session
-      const stored = localStorage.getItem("sakuwise_auth_user");
-      if (stored) {
-        setUser(JSON.parse(stored));
-      } else {
-        // Fallback default logged-in session for seamless preview if user navigates to dashboard directly
-        setUser({
-          id: "usr_najwa_default",
-          name: "Najwa",
-          email: "najwa.finance@student.ac.id",
-          role: "Student account",
-        });
-      }
+    // Deferred so state is not set synchronously in the effect body
+    const timer = setTimeout(() => {
+      try {
+        // 1. Load active session
+        const stored = localStorage.getItem("sakuwise_auth_user");
+        if (stored) {
+          setUser(JSON.parse(stored));
+        } else {
+          // Fallback default logged-in session for seamless preview if user navigates to dashboard directly
+          setUser({
+            id: "usr_najwa_default",
+            name: "Najwa",
+            email: "najwa.finance@student.ac.id",
+            role: "Student account",
+          });
+        }
 
-      // 2. Initialize registered accounts DB in localStorage if not set
-      const storedAccounts = localStorage.getItem("sakuwise_registered_accounts");
-      if (!storedAccounts) {
-        localStorage.setItem("sakuwise_registered_accounts", JSON.stringify(DEFAULT_USERS_DB));
+        // 2. Initialize registered accounts DB in localStorage if not set
+        const storedAccounts = localStorage.getItem("sakuwise_registered_accounts");
+        if (!storedAccounts) {
+          localStorage.setItem("sakuwise_registered_accounts", JSON.stringify(DEFAULT_USERS_DB));
+        }
+      } catch (e) {
+        console.error("Failed to load auth session", e);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (e) {
-      console.error("Failed to load auth session", e);
-    } finally {
-      setIsLoading(false);
-    }
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const getAccountsDb = () => {
@@ -130,7 +135,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           router.push("/dashboard");
           return { success: true };
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.warn("Supabase auth failed, trying local store...", err);
       }
     }
@@ -229,7 +234,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           router.push("/dashboard");
           return { success: true };
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.warn("Supabase signup fallback...", err);
       }
     }
