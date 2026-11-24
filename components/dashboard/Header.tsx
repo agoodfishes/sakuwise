@@ -1,22 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { Menu, Calendar, Plus, Bell } from "lucide-react";
+import React from "react";
+import { Menu, Calendar, Plus } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { useFinance, formatRupiah, parseISODate, isDemoAccount } from "@/context/FinanceContext";
-import { loadPrefs, PREFS_EVENT, type Preferences } from "@/lib/preferences";
+import { useFinance, parseISODate, isDemoAccount } from "@/context/FinanceContext";
 
 interface HeaderProps {
   activeTab: string;
   onOpenAddExpense: () => void;
   onOpenMobileSidebar: () => void;
-}
-
-function dueText(daysUntil: number): string {
-  if (daysUntil < 0) return `Overdue by ${-daysUntil} ${daysUntil === -1 ? "day" : "days"}`;
-  if (daysUntil === 0) return "Due today";
-  if (daysUntil === 1) return "Due tomorrow";
-  return `Due in ${daysUntil} days`;
 }
 
 export default function Header({
@@ -26,44 +18,8 @@ export default function Header({
 }: HeaderProps) {
   const { user } = useAuth();
   const { summary } = useFinance();
-  const { today, periodStart, dueSoonBills } = summary;
+  const { today, periodStart } = summary;
   const userName = user?.name || "Najwa";
-  const [bellOpen, setBellOpen] = useState(false);
-  const bellRef = useRef<HTMLDivElement>(null);
-
-  // Close the notification dropdown on outside click or Escape
-  useEffect(() => {
-    if (!bellOpen) return;
-    const onPointerDown = (e: MouseEvent) => {
-      if (bellRef.current && !bellRef.current.contains(e.target as Node)) {
-        setBellOpen(false);
-      }
-    };
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setBellOpen(false);
-    };
-    document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [bellOpen]);
-
-  // Notification preferences from Settings; refreshed whenever they are saved
-  const [prefs, setPrefs] = useState<Preferences>(() => loadPrefs(user?.email));
-  useEffect(() => {
-    const refresh = () => setPrefs(loadPrefs(user?.email));
-    window.addEventListener(PREFS_EVENT, refresh);
-    return () => window.removeEventListener(PREFS_EVENT, refresh);
-  }, [user?.email]);
-
-  const budgetWarnings = prefs.budgetAlerts
-    ? summary.categoryStats.filter((c) => c.budget > 0 && c.percent >= 85)
-    : [];
-  const showDailyReminder = prefs.dailyReminder && summary.spentToday === 0;
-  const notificationCount =
-    dueSoonBills.length + budgetWarnings.length + (showDailyReminder ? 1 : 0);
 
   const monthLabel = parseISODate(periodStart).toLocaleDateString("en-US", {
     month: "long",
@@ -81,7 +37,7 @@ export default function Header({
       case "budget":
         return "MY WORKSPACE / MONTHLY BUDGET";
       case "expenses":
-        return "MY WORKSPACE / EXPENSES";
+        return "MY WORKSPACE / TRANSACTIONS";
       case "ai":
         return "MY WORKSPACE / AI ASSISTANT";
       case "bills":
@@ -106,8 +62,8 @@ export default function Header({
         };
       case "expenses":
         return {
-          title: "Small expenses. Clearer picture.",
-          subtitle: "Keep track of your daily spending, one transaction at a time.",
+          title: "Small transactions. Clearer picture.",
+          subtitle: "Keep track of your income and spending, one transaction at a time.",
         };
       case "ai":
         return {
@@ -163,7 +119,7 @@ export default function Header({
           type="button"
           onClick={onOpenAddExpense}
           className="min-w-11 min-h-11 rounded-xl bg-[#244833] text-white text-xs font-semibold flex items-center justify-center gap-1"
-          aria-label="Add expense"
+          aria-label="Add transaction"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -172,7 +128,7 @@ export default function Header({
       {/* Main Header Container */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         {/* Left: Breadcrumb & Title */}
-        <div>
+        <div className="min-w-0">
           <p className="text-[11px] font-bold tracking-widest uppercase text-[#738777]">
             {getBreadcrumb()}
           </p>
@@ -182,95 +138,28 @@ export default function Header({
           <p className="text-xs sm:text-sm text-[#5C7063] mt-0.5">{subtitle}</p>
         </div>
 
-        {/* Right: Status Pills, Date, Notifications, Month, and Action Button */}
+        {/* Right: Status pill, Date, Month, and Action Button */}
         <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-          {/* Sample Data Pill */}
           <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium text-[#496251] bg-[#E8EFEA] border border-[#D5E1D7]">
             {isDemoAccount(user?.email) ? "Sample data" : "Your data"}
           </span>
 
-          {/* Current Date */}
           <span className="hidden xl:inline-block text-xs font-medium text-[#718576]">
             {todayLabel}
           </span>
 
-          {/* Notification Bell */}
-          <div className="relative" ref={bellRef}>
-            <button
-              type="button"
-              onClick={() => setBellOpen((v) => !v)}
-              className="relative w-11 h-11 sm:w-9 sm:h-9 rounded-xl bg-white border border-[#DDE6DF] flex items-center justify-center text-[#55695B] hover:text-[#1E3A2B] hover:bg-gray-50 transition-colors shadow-2xs cursor-pointer"
-              title="Notifications"
-              aria-label="Notifications"
-              aria-expanded={bellOpen}
-            >
-              <Bell className="w-4 h-4" />
-              {notificationCount > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-[#E08C38] text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-white">
-                  {notificationCount}
-                </span>
-              )}
-            </button>
-
-            {bellOpen && (
-              <div className="fixed inset-x-4 mt-2 sm:absolute sm:inset-x-auto sm:right-0 sm:w-72 max-h-[70dvh] overflow-y-auto bg-white rounded-2xl border border-[#E1E9E2] shadow-xl p-4 z-40">
-                <p className="text-xs font-bold text-[#1E3A2B] mb-2">Reminders</p>
-                {notificationCount === 0 ? (
-                  <p className="text-xs text-[#718576]">No reminders right now.</p>
-                ) : (
-                  <ul className="space-y-2">
-                    {showDailyReminder && (
-                      <li className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E9EFEA]">
-                        <p className="text-xs font-bold text-[#1E3A2B]">Log today&apos;s spending</p>
-                        <p className="text-[11px] text-[#718576]">No expenses recorded yet today.</p>
-                      </li>
-                    )}
-                    {budgetWarnings.map((c) => (
-                      <li key={c.id} className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E9EFEA]">
-                        <p className="text-xs font-bold text-[#1E3A2B]">{c.name} budget</p>
-                        <p className={`text-[11px] ${c.over ? "text-[#B4491F] font-semibold" : "text-[#718576]"}`}>
-                          {c.over ? "Over budget" : `${c.percent}% used`} · {formatRupiah(c.spent)} of {formatRupiah(c.budget)}
-                        </p>
-                      </li>
-                    ))}
-                    {dueSoonBills.map((b) => (
-                      <li
-                        key={b.id}
-                        className="flex items-center justify-between gap-3 p-2 rounded-xl bg-[#FAF8F5] border border-[#E9EFEA]"
-                      >
-                        <div>
-                          <p className="text-xs font-bold text-[#1E3A2B]">{b.name}</p>
-                          <p
-                            className={`text-[11px] ${
-                              b.overdue ? "text-[#B4491F] font-semibold" : "text-[#718576]"
-                            }`}
-                          >
-                            {dueText(b.daysUntil)}
-                          </p>
-                        </div>
-                        <span className="text-xs font-bold text-[#1E3A2B]">{formatRupiah(b.amount)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Current period month */}
           <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#DDE6DF] shadow-2xs text-xs font-bold text-[#1E3A2B]">
             <Calendar className="w-3.5 h-3.5 text-[#5B7664]" />
             <span>{monthLabel}</span>
           </div>
 
-          {/* Primary Action Button */}
           <button
             type="button"
             onClick={onOpenAddExpense}
             className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-[#224431] hover:bg-[#163324] shadow-sm hover:shadow active:scale-[0.98] transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>Add expense</span>
+            <span>Add transaction</span>
           </button>
         </div>
       </div>

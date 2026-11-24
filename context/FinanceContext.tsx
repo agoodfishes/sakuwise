@@ -5,11 +5,14 @@ import { useAuth } from '@/context/AuthContext';
 
 // ---------- Types ----------
 
+export type TxType = 'expense' | 'income';
+
 export interface Transaction {
   id: string;
   name: string;
   category: string;
   amount: number;
+  type?: TxType; // missing on older saved data, which means 'expense'
   date: string; // YYYY-MM-DD (local date)
   note?: string;
   createdAt: number;
@@ -57,6 +60,7 @@ export interface ActionResult {
 }
 
 export interface NewTransaction {
+  type?: TxType;
   name: string;
   category: string;
   amount: number;
@@ -110,6 +114,7 @@ export interface FinanceSummary {
   nextAllowanceDate: string;
   daysLeft: number;
   totalSpent: number;
+  extraIncome: number;
   remaining: number;
   percentSpent: number;
   percentRemaining: number;
@@ -145,6 +150,7 @@ const GOAL_COLORS = ['bg-[#244833]', 'bg-[#E08C38]', 'bg-[#3D644C]', 'bg-[#6B8F7
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
+const isExpense = (t: { type?: TxType }) => t.type !== 'income';
 
 export function toISODate(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -314,9 +320,12 @@ function computeSummary(data: FinanceData, today: string): FinanceSummary {
   const daysLeft = Math.max(1, diffDays(today, next));
 
   const periodTransactions = data.transactions.filter((t) => t.date >= periodStart && t.date < next);
-  const totalSpent = sum(periodTransactions.map((t) => t.amount));
-  const remaining = data.income - totalSpent;
-  const spentToday = sum(periodTransactions.filter((t) => t.date === today).map((t) => t.amount));
+  const totalSpent = sum(periodTransactions.filter(isExpense).map((t) => t.amount));
+  const extraIncome = sum(periodTransactions.filter((t) => !isExpense(t)).map((t) => t.amount));
+  const remaining = data.income + extraIncome - totalSpent;
+  const spentToday = sum(
+    periodTransactions.filter((t) => isExpense(t) && t.date === today).map((t) => t.amount)
+  );
 
   // The daily limit stays stable during the day: it is based on the balance at the
   // start of today, divided by the days left until the next allowance.
@@ -324,13 +333,16 @@ function computeSummary(data: FinanceData, today: string): FinanceSummary {
   const dailyLimit = Math.max(0, Math.floor(balanceAtDayStart / daysLeft));
   const leftToday = dailyLimit - spentToday;
 
-  const percentSpent = data.income > 0 ? Math.min(100, Math.max(0, Math.round((totalSpent / data.income) * 100))) : 0;
+  const budgetBase = data.income + extraIncome;
+  const percentSpent = budgetBase > 0 ? Math.min(100, Math.max(0, Math.round((totalSpent / budgetBase) * 100))) : 0;
   const percentRemaining = data.income > 0 ? 100 - percentSpent : 0;
 
   const totalBudget = sum(data.categories.map((c) => c.budget));
 
   const categoryStats: CategoryStat[] = data.categories.map((c) => {
-    const spent = sum(periodTransactions.filter((t) => t.category === c.name).map((t) => t.amount));
+    const spent = sum(
+      periodTransactions.filter((t) => isExpense(t) && t.category === c.name).map((t) => t.amount)
+    );
     const percent = c.budget > 0 ? Math.round((spent / c.budget) * 100) : spent > 0 ? 100 : 0;
     return { ...c, spent, remaining: c.budget - spent, percent, over: spent > c.budget };
   });
@@ -341,7 +353,7 @@ function computeSummary(data: FinanceData, today: string): FinanceSummary {
     last7Days.push({
       date,
       day: date.slice(8),
-      total: sum(data.transactions.filter((t) => t.date === date).map((t) => t.amount)),
+      total: sum(data.transactions.filter((t) => isExpense(t) && t.date === date).map((t) => t.amount)),
       isToday: i === 0,
     });
   }
@@ -361,6 +373,7 @@ function computeSummary(data: FinanceData, today: string): FinanceSummary {
     nextAllowanceDate: next,
     daysLeft,
     totalSpent,
+    extraIncome,
     remaining,
     percentSpent,
     percentRemaining,
@@ -478,6 +491,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
       name,
       category: input.category,
       amount: Math.round(input.amount),
+      type: input.type ?? 'expense',
       date: input.date || today,
       note: input.note?.trim() || undefined,
       createdAt: Date.now(),
