@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import React, { type ReactNode } from "react";
+import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
@@ -10,6 +10,13 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#FAF8F5",
+};
 
 export const metadata: Metadata = {
   title: "Sakuwise - Kelola Keuangan Pribadi Lebih Bijak & Terarah",
@@ -35,20 +42,15 @@ export default function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  return React.createElement(
-    "html",
-    {
-      lang: "id",
-      className: `${plusJakartaSans.variable} scroll-smooth`,
-      "data-scroll-behavior": "smooth",
-    },
-    React.createElement(
-      "body",
-      {
-        className:
-          "min-h-screen bg-[#FAF8F5] text-[#1E3A2B] font-sans antialiased selection:bg-[#E08C38]/20 selection:text-[#1E3A2B]",
-      },
-      React.createElement(AuthProvider, null, children),
-    ),
+  return (
+    <html
+      lang="id"
+      className={`${plusJakartaSans.variable} scroll-smooth`}
+      data-scroll-behavior="smooth"
+    >
+      <body className="min-h-dvh bg-[#FAF8F5] text-[#1E3A2B] font-sans antialiased selection:bg-[#E08C38]/20 selection:text-[#1E3A2B]">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
+    </html>
   );
 }

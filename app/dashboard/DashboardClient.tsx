@@ -45,7 +45,7 @@ export default function DashboardClient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] flex">
+    <div className="min-h-dvh bg-[#FAF8F5] flex">
       {/* 1. Sidebar Navigation (Left) */}
       <Sidebar
         activeTab={activeTab}
@@ -55,7 +55,7 @@ export default function DashboardClient() {
       />
 
       {/* 2. Main Content Area (Right) */}
-      <div className="flex-1 md:pl-64 flex flex-col min-h-screen">
+      <div className="flex-1 md:pl-64 flex flex-col min-h-dvh">
         {/* Top Header */}
         <Header
           activeTab={activeTab}

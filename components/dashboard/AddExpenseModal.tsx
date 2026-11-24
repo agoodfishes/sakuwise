@@ -72,8 +72,8 @@ export default function AddExpenseModal({ isOpen, onClose }: AddExpenseModalProp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-[#DCE4DD] animate-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] bg-black/40 backdrop-blur-xs animate-in fade-in duration-150">
+      <div role="dialog" aria-modal="true" aria-label="Add an expense" className="relative w-full max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-[#DCE4DD] animate-in zoom-in-95 duration-150">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-[#F0F4F0]">
           <div>
@@ -83,7 +83,7 @@ export default function AddExpenseModal({ isOpen, onClose }: AddExpenseModalProp
           <button
             type="button"
             onClick={handleClose}
-            className="p-1.5 rounded-full text-gray-400 hover:text-gray-700 hover:bg-black/5"
+            className="min-w-11 min-h-11 -mr-2 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 hover:bg-black/5"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -198,13 +198,13 @@ export default function AddExpenseModal({ isOpen, onClose }: AddExpenseModalProp
               <button
                 type="button"
                 onClick={handleClose}
-                className="w-1/2 py-2.5 px-4 rounded-xl text-xs font-semibold text-[#4F6253] bg-[#FAF8F5] hover:bg-black/5 transition-colors cursor-pointer"
+                className="w-1/2 min-h-11 py-2.5 px-4 rounded-xl text-xs font-semibold text-[#4F6253] bg-[#FAF8F5] hover:bg-black/5 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="w-1/2 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] transition-colors shadow-sm cursor-pointer"
+                className="w-1/2 min-h-11 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] transition-colors shadow-sm cursor-pointer"
               >
                 Save expense
               </button>

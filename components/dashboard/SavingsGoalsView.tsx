@@ -90,7 +90,7 @@ export default function SavingsGoalsView() {
         <button
           type="button"
           onClick={() => setShowAdd((v) => !v)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[#224431] hover:bg-[#163323] transition-colors cursor-pointer self-start sm:self-auto"
+          className="min-h-11 md:min-h-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[#224431] hover:bg-[#163323] transition-colors cursor-pointer self-start sm:self-auto"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>{showAdd ? "Tutup" : "Buat Target Baru"}</span>
@@ -181,7 +181,7 @@ export default function SavingsGoalsView() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] cursor-pointer"
+              className="min-h-11 md:min-h-0 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] cursor-pointer"
             >
               Simpan target
             </button>
@@ -243,14 +243,14 @@ export default function SavingsGoalsView() {
                   <button
                     type="button"
                     onClick={() => setSelectedGoalId(g.id)}
-                    className="flex-1 py-2 px-3 rounded-xl text-xs font-semibold text-[#244833] bg-[#E8EFEA] hover:bg-[#DCE6DF] transition-colors cursor-pointer"
+                    className="flex-1 min-h-11 md:min-h-0 py-2 px-3 rounded-xl text-xs font-semibold text-[#244833] bg-[#E8EFEA] hover:bg-[#DCE6DF] transition-colors cursor-pointer"
                   >
                     + Tambah Tabungan
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(g.id, g.title)}
-                    className="p-2 rounded-lg text-gray-300 hover:text-[#B4491F] hover:bg-[#FBE9E2] transition-colors cursor-pointer"
+                    className="min-w-11 min-h-11 md:min-w-0 md:min-h-0 inline-flex items-center justify-center md:p-2 rounded-lg text-gray-400 md:text-gray-300 hover:text-[#B4491F] hover:bg-[#FBE9E2] transition-colors cursor-pointer"
                     aria-label={`Delete ${g.title}`}
                   >
                     <Trash2 className="w-4 h-4" />
@@ -264,8 +264,8 @@ export default function SavingsGoalsView() {
 
       {/* Quick Deposit Modal */}
       {selectedGoal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
-          <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl border border-[#DCE4DD]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] bg-black/40 backdrop-blur-xs">
+          <div role="dialog" aria-modal="true" aria-label="Tambah Tabungan" className="w-full max-w-sm max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white rounded-3xl p-6 shadow-2xl border border-[#DCE4DD]">
             <h3 className="text-sm font-bold text-[#1E3A2B]">Tambah Tabungan</h3>
             <p className="text-xs text-[#718576] mt-0.5 mb-4">
               Sisihkan sebagian allowance ke &quot;{selectedGoal.title}&quot;.
@@ -298,13 +298,13 @@ export default function SavingsGoalsView() {
                 <button
                   type="button"
                   onClick={closeDeposit}
-                  className="w-1/2 py-2 text-xs font-semibold text-gray-600 bg-gray-100 rounded-xl cursor-pointer"
+                  className="w-1/2 min-h-11 py-2 text-xs font-semibold text-gray-600 bg-gray-100 rounded-xl cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="w-1/2 py-2 text-xs font-bold text-white bg-[#224431] rounded-xl shadow-xs cursor-pointer"
+                  className="w-1/2 min-h-11 py-2 text-xs font-bold text-white bg-[#224431] rounded-xl shadow-xs cursor-pointer"
                 >
                   Simpan Tabungan
                 </button>

@@ -168,7 +168,7 @@ export default function MonthlyBudgetView() {
             <button
               type="button"
               onClick={() => setShowAdd((v) => !v)}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#244833] hover:text-[#112419] bg-[#E8EFEA] hover:bg-[#DCE6DF] px-3 py-1.5 rounded-lg transition-colors cursor-pointer self-start sm:self-auto"
+              className="min-h-11 md:min-h-0 inline-flex items-center gap-1.5 text-xs font-semibold text-[#244833] hover:text-[#112419] bg-[#E8EFEA] hover:bg-[#DCE6DF] px-3 py-1.5 rounded-lg transition-colors cursor-pointer self-start sm:self-auto"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>{showAdd ? "Close" : "Add category"}</span>
@@ -233,7 +233,7 @@ export default function MonthlyBudgetView() {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] cursor-pointer"
+                  className="min-h-11 md:min-h-0 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] cursor-pointer"
                 >
                   Save category
                 </button>
@@ -286,7 +286,7 @@ export default function MonthlyBudgetView() {
                               if (e.key === "Enter") e.currentTarget.blur();
                             }}
                             aria-label={`Monthly budget for ${c.name}`}
-                            className="w-32 pl-8 pr-2 py-1 rounded-md border border-[#E7EDE7] bg-[#FAF8F5] text-xs font-semibold text-[#1E3A2B] focus:outline-none focus:border-[#224431] focus:bg-white"
+                            className="w-32 min-h-11 md:min-h-0 pl-8 pr-2 py-1 rounded-md border border-[#E7EDE7] bg-[#FAF8F5] text-xs font-semibold text-[#1E3A2B] focus:outline-none focus:border-[#224431] focus:bg-white"
                           />
                         </div>
                       </td>
@@ -310,7 +310,7 @@ export default function MonthlyBudgetView() {
                         <button
                           type="button"
                           onClick={() => handleDeleteCategory(c.id, c.name)}
-                          className="p-1 rounded-md text-gray-300 hover:text-[#B4491F] hover:bg-[#FBE9E2] transition-colors cursor-pointer"
+                          className="min-w-11 min-h-11 md:min-w-0 md:min-h-0 inline-flex items-center justify-center md:p-1 rounded-md text-gray-400 md:text-gray-300 hover:text-[#B4491F] hover:bg-[#FBE9E2] transition-colors cursor-pointer"
                           aria-label={`Delete ${c.name}`}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -392,7 +392,7 @@ export default function MonthlyBudgetView() {
 
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] cursor-pointer"
+                className="w-full min-h-11 md:min-h-0 py-2.5 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] cursor-pointer"
               >
                 Update allowance
               </button>

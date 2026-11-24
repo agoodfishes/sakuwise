@@ -67,7 +67,7 @@ export default function HeroSection({ onOpenHowItWorks }: HeroSectionProps) {
             </div>
 
             {/* Trust Badges */}
-            <div className="mt-8 sm:mt-10 flex items-center gap-6 text-xs sm:text-sm text-[#55695C] font-medium">
+            <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs sm:text-sm text-[#55695C] font-medium">
               <div className="flex items-center gap-1.5">
                 <Check className="w-4 h-4 text-[#20743E] stroke-[3]" />
                 <span>Gratis untuk mulai</span>

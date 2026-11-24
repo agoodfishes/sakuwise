@@ -94,8 +94,8 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-[#DEE6DF] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] bg-black/50 backdrop-blur-xs animate-in fade-in duration-200">
+      <div role="dialog" aria-modal="true" aria-label="Cara Kerja Sakuwise" className="relative w-full max-w-2xl max-h-[calc(100dvh-2rem)] flex flex-col bg-white rounded-3xl shadow-2xl border border-[#DEE6DF] overflow-hidden">
         
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#EBEFEA] bg-[#FAF8F5]">
@@ -108,8 +108,10 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
             </h3>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-black/5 transition-colors"
+            aria-label="Tutup"
+            className="min-w-11 min-h-11 -mr-2 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 hover:bg-black/5 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -133,7 +135,7 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
         </div>
 
         {/* Content Body */}
-        <div className="p-6 sm:p-8">
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-6 sm:p-8">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-2xl bg-[#E8EFEA] text-[#224431] flex items-center justify-center flex-shrink-0">
               {React.createElement(steps[activeStep].icon, {

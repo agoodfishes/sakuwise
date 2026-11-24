@@ -105,8 +105,9 @@ export default function HeroDashboardMockup() {
               {months.map((item, idx) => (
                 <button
                   key={`label-${item.month}`}
+                  type="button"
                   onClick={() => setActiveMonthIndex(idx)}
-                  className={`flex-1 text-center text-xs transition-colors cursor-pointer ${
+                  className={`flex-1 min-h-11 sm:min-h-0 text-center text-xs transition-colors cursor-pointer ${
                     idx === activeMonthIndex
                       ? "font-bold text-[#1E3A2B]"
                       : "font-medium text-[#7D8F82] hover:text-[#1E3A2B]"

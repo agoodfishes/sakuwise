@@ -57,6 +57,15 @@ summary:focus-visible,
   outline-offset: 2px;
 }
 
+/* Prevent iOS Safari from auto-zooming when a form field is focused (needs >= 16px) */
+@media (max-width: 767px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 /* Custom scrollbar for modern feel */
 ::-webkit-scrollbar {
   width: 8px;

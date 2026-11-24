@@ -145,13 +145,13 @@ export default function Header({
   const { title, subtitle } = getTitleAndSubtitle();
 
   return (
-    <header className="sticky top-0 z-30 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#E8ECE8] px-4 sm:px-8 py-5">
+    <header className="sticky top-0 z-30 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#E8ECE8] px-4 sm:px-8 pb-5 pt-[max(1.25rem,env(safe-area-inset-top))]">
       {/* Mobile Top Bar */}
       <div className="flex md:hidden items-center justify-between pb-3 mb-3 border-b border-gray-200/60">
         <button
           type="button"
           onClick={onOpenMobileSidebar}
-          className="p-2 rounded-xl text-[#1E3A2B] hover:bg-black/5"
+          className="min-w-11 min-h-11 flex items-center justify-center rounded-xl text-[#1E3A2B] hover:bg-black/5"
           aria-label="Open menu"
         >
           <Menu className="w-5 h-5" />
@@ -162,7 +162,7 @@ export default function Header({
         <button
           type="button"
           onClick={onOpenAddExpense}
-          className="p-2 rounded-xl bg-[#244833] text-white text-xs font-semibold flex items-center gap-1"
+          className="min-w-11 min-h-11 rounded-xl bg-[#244833] text-white text-xs font-semibold flex items-center justify-center gap-1"
           aria-label="Add expense"
         >
           <Plus className="w-4 h-4" />
@@ -199,7 +199,7 @@ export default function Header({
             <button
               type="button"
               onClick={() => setBellOpen((v) => !v)}
-              className="relative w-9 h-9 rounded-xl bg-white border border-[#DDE6DF] flex items-center justify-center text-[#55695B] hover:text-[#1E3A2B] hover:bg-gray-50 transition-colors shadow-2xs cursor-pointer"
+              className="relative w-11 h-11 sm:w-9 sm:h-9 rounded-xl bg-white border border-[#DDE6DF] flex items-center justify-center text-[#55695B] hover:text-[#1E3A2B] hover:bg-gray-50 transition-colors shadow-2xs cursor-pointer"
               title="Notifications"
               aria-label="Notifications"
               aria-expanded={bellOpen}
@@ -213,7 +213,7 @@ export default function Header({
             </button>
 
             {bellOpen && (
-              <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-[#E1E9E2] shadow-xl p-4 z-40">
+              <div className="fixed inset-x-4 mt-2 sm:absolute sm:inset-x-auto sm:right-0 sm:w-72 max-h-[70dvh] overflow-y-auto bg-white rounded-2xl border border-[#E1E9E2] shadow-xl p-4 z-40">
                 <p className="text-xs font-bold text-[#1E3A2B] mb-2">Reminders</p>
                 {notificationCount === 0 ? (
                   <p className="text-xs text-[#718576]">No reminders right now.</p>
@@ -229,7 +229,7 @@ export default function Header({
                       <li key={c.id} className="p-2 rounded-xl bg-[#FAF8F5] border border-[#E9EFEA]">
                         <p className="text-xs font-bold text-[#1E3A2B]">{c.name} budget</p>
                         <p className={`text-[11px] ${c.over ? "text-[#B4491F] font-semibold" : "text-[#718576]"}`}>
-                          {c.over ? "Over budget" : `${c.percent}% used`} Â· {formatRupiah(c.spent)} of {formatRupiah(c.budget)}
+                          {c.over ? "Over budget" : `${c.percent}% used`} · {formatRupiah(c.spent)} of {formatRupiah(c.budget)}
                         </p>
                       </li>
                     ))}
@@ -267,7 +267,7 @@ export default function Header({
           <button
             type="button"
             onClick={onOpenAddExpense}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-[#224431] hover:bg-[#163324] shadow-sm hover:shadow active:scale-[0.98] transition-all cursor-pointer"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-[#224431] hover:bg-[#163324] shadow-sm hover:shadow active:scale-[0.98] transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Add expense</span>

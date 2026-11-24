@@ -194,7 +194,7 @@ export default function ExpensesView() {
               type="button"
               onClick={handleExport}
               disabled={filtered.length === 0}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1E3A2B] hover:text-[#0F2218] transition-colors cursor-pointer self-start sm:self-auto disabled:opacity-40 disabled:cursor-not-allowed"
+              className="min-h-11 md:min-h-0 inline-flex items-center gap-1.5 text-xs font-semibold text-[#1E3A2B] hover:text-[#0F2218] transition-colors cursor-pointer self-start sm:self-auto disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <span>Export Excel</span>
               <Download className="w-3.5 h-3.5" />
@@ -298,7 +298,7 @@ export default function ExpensesView() {
                           <button
                             type="button"
                             onClick={() => handleDelete(t.id, t.name)}
-                            className="p-1 rounded-md text-gray-300 hover:text-[#B4491F] hover:bg-[#FBE9E2] transition-colors cursor-pointer"
+                            className="min-w-11 min-h-11 md:min-w-0 md:min-h-0 inline-flex items-center justify-center md:p-1 rounded-md text-gray-400 md:text-gray-300 hover:text-[#B4491F] hover:bg-[#FBE9E2] transition-colors cursor-pointer"
                             aria-label={`Delete ${t.name}`}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -324,7 +324,7 @@ export default function ExpensesView() {
                 type="button"
                 disabled={safePage <= 1}
                 onClick={() => setPage(safePage - 1)}
-                className="px-3 py-1 rounded-lg border border-[#D5E1D7] text-xs font-medium hover:bg-black/5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="min-h-11 md:min-h-0 px-3 py-1 rounded-lg border border-[#D5E1D7] text-xs font-medium hover:bg-black/5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 &larr; Previous
               </button>
@@ -332,7 +332,7 @@ export default function ExpensesView() {
                 type="button"
                 disabled={safePage >= totalPages}
                 onClick={() => setPage(safePage + 1)}
-                className="px-3 py-1 rounded-lg border border-[#D5E1D7] text-xs font-medium bg-[#E8EFEA] text-[#1E3A2B] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="min-h-11 md:min-h-0 px-3 py-1 rounded-lg border border-[#D5E1D7] text-xs font-medium bg-[#E8EFEA] text-[#1E3A2B] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 Next &rarr;
               </button>
@@ -445,13 +445,13 @@ export default function ExpensesView() {
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="w-1/2 py-2 px-3 rounded-xl text-xs font-semibold text-[#576B5D] bg-[#FAF8F5] hover:bg-black/5 cursor-pointer"
+                    className="w-1/2 min-h-11 md:min-h-0 py-2 px-3 rounded-xl text-xs font-semibold text-[#576B5D] bg-[#FAF8F5] hover:bg-black/5 cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="w-1/2 py-2 px-3 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] shadow-xs cursor-pointer"
+                    className="w-1/2 min-h-11 md:min-h-0 py-2 px-3 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] shadow-xs cursor-pointer"
                   >
                     Save expense
                   </button>

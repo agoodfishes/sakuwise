@@ -48,7 +48,7 @@ export default function SettingsView() {
             <p className="text-sm font-bold text-[#1E3A2B]">{user?.name || "Najwa"}</p>
             <p className="text-xs text-[#718576]">{user?.email || "najwa.finance@student.ac.id"}</p>
             <span className="inline-block mt-1 text-[11px] font-semibold bg-[#E8EFEA] text-[#244833] px-2 py-0.5 rounded-full">
-              {user?.role || "Student account"} Â· {isGoogle ? "Google OAuth" : "Email & kata sandi"}
+              {user?.role || "Student account"} · {isGoogle ? "Google OAuth" : "Email & kata sandi"}
             </span>
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function SettingsView() {
               type="checkbox"
               checked={prefs.dailyReminder}
               onChange={(e) => setPrefs((p) => ({ ...p, dailyReminder: e.target.checked }))}
-              className="w-4 h-4 accent-[#224431] cursor-pointer"
+              className="w-5 h-5 md:w-4 md:h-4 flex-shrink-0 accent-[#224431] cursor-pointer"
             />
           </div>
 
@@ -90,7 +90,7 @@ export default function SettingsView() {
               type="checkbox"
               checked={prefs.budgetAlerts}
               onChange={(e) => setPrefs((p) => ({ ...p, budgetAlerts: e.target.checked }))}
-              className="w-4 h-4 accent-[#224431] cursor-pointer"
+              className="w-5 h-5 md:w-4 md:h-4 flex-shrink-0 accent-[#224431] cursor-pointer"
             />
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function SettingsView() {
             <button
               type="button"
               onClick={handleReset}
-              className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-[#B3402A] bg-[#FDF1EE] hover:bg-[#FAE3DD] transition-colors cursor-pointer"
+              className="flex-shrink-0 min-h-11 md:min-h-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-[#B3402A] bg-[#FDF1EE] hover:bg-[#FAE3DD] transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               {demo ? "Reset" : "Hapus"}
@@ -123,7 +123,7 @@ export default function SettingsView() {
           <button
             type="button"
             onClick={handleSave}
-            className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] transition-colors shadow-xs cursor-pointer"
+            className="min-h-11 md:min-h-0 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] transition-colors shadow-xs cursor-pointer"
           >
             Simpan Perubahan
           </button>

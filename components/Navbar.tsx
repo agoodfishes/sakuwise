@@ -37,7 +37,7 @@ export default function Navbar({ onOpenHowItWorks }: NavbarProps) {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+      className={`sticky top-0 z-50 w-full pt-[env(safe-area-inset-top)] transition-all duration-300 ${
         isScrolled
           ? "bg-[#FAF8F5]/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-b border-[#EBEFEA]"
           : "bg-[#FAF8F5]"
@@ -88,7 +88,7 @@ export default function Navbar({ onOpenHowItWorks }: NavbarProps) {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-[#1E3A2B] hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#224431]"
+              className="min-w-11 min-h-11 inline-flex items-center justify-center rounded-xl text-[#1E3A2B] hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#224431]"
               aria-label="Buka atau tutup menu navigasi"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
@@ -105,7 +105,7 @@ export default function Navbar({ onOpenHowItWorks }: NavbarProps) {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div id="mobile-menu" className="md:hidden bg-[#FAF8F5] border-b border-[#E8ECE8] px-5 pt-3 pb-6 shadow-xl animate-in slide-in-from-top-3 duration-200">
+        <div id="mobile-menu" className="md:hidden max-h-[calc(100dvh-5rem-env(safe-area-inset-top))] overflow-y-auto overscroll-contain bg-[#FAF8F5] border-b border-[#E8ECE8] px-5 pt-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-xl animate-in slide-in-from-top-3 duration-200">
           <div className="flex flex-col space-y-4">
             {navLinks.map((link) => (
               <a
@@ -115,7 +115,7 @@ export default function Navbar({ onOpenHowItWorks }: NavbarProps) {
                   if (link.onClick) link.onClick(e);
                   setMobileMenuOpen(false);
                 }}
-                className="text-base font-medium text-[#2E4536] hover:text-[#1E3A2B] py-2 border-b border-gray-100/60"
+                className="min-h-11 flex items-center text-base font-medium text-[#2E4536] hover:text-[#1E3A2B] py-2 border-b border-gray-100/60"
               >
                 {link.name}
               </a>
@@ -125,7 +125,7 @@ export default function Navbar({ onOpenHowItWorks }: NavbarProps) {
               <a
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2.5 text-sm font-semibold text-[#1E3A2B] rounded-xl border border-[#D8E2D9] hover:bg-black/5"
+                className="w-full min-h-11 flex items-center justify-center py-2.5 text-sm font-semibold text-[#1E3A2B] rounded-xl border border-[#D8E2D9] hover:bg-black/5"
               >
                 Masuk
               </a>

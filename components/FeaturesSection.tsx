@@ -91,7 +91,7 @@ export default function FeaturesSection({ onSelectFeature }: FeaturesSectionProp
                   <button
                     type="button"
                     onClick={() => onSelectFeature && onSelectFeature(item.id)}
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#1E3A2B] hover:text-[#0E2016] group/btn transition-colors cursor-pointer"
+                    className="min-h-11 md:min-h-0 inline-flex items-center gap-2 text-sm font-semibold text-[#1E3A2B] hover:text-[#0E2016] group/btn transition-colors cursor-pointer"
                   >
                     <span>{item.cta}</span>
                     <ArrowRight className="w-4 h-4 text-[#758A7A] group-hover/btn:text-[#1E3A2B] group-hover/btn:translate-x-1 transition-all duration-200" />

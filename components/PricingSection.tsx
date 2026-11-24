@@ -27,7 +27,7 @@ export default function PricingSection() {
             <button
               type="button"
               onClick={() => setIsAnnual(false)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+              className={`min-h-11 md:min-h-0 px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
                 !isAnnual
                   ? "bg-white text-[#1E3A2B] shadow-xs"
                   : "text-[#586C5E] hover:text-[#1E3A2B]"
@@ -38,7 +38,7 @@ export default function PricingSection() {
             <button
               type="button"
               onClick={() => setIsAnnual(true)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 ${
+              className={`min-h-11 md:min-h-0 px-4 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 ${
                 isAnnual
                   ? "bg-[#224431] text-white shadow-xs"
                   : "text-[#586C5E] hover:text-[#1E3A2B]"
@@ -91,7 +91,7 @@ export default function PricingSection() {
 
             <a
               href="#register"
-              className="mt-8 w-full py-3 px-4 rounded-xl text-center text-xs font-semibold text-[#1E3A2B] bg-[#EDF3EE] hover:bg-[#E0EAE1] transition-colors block"
+              className="mt-8 w-full min-h-11 py-3 px-4 rounded-xl text-center text-xs font-semibold text-[#1E3A2B] bg-[#EDF3EE] hover:bg-[#E0EAE1] transition-colors block"
             >
               Mulai Gratis
             </a>
@@ -127,7 +127,7 @@ export default function PricingSection() {
                 </p>
               )}
 
-              <div className="mt-8 space-y-3.5 text-xs text-[#C8DECFA]">
+              <div className="mt-8 space-y-3.5 text-xs text-[#C8DECF]">
                 {[
                   "Saku Anggaran tanpa batas",
                   "Target tabungan impian tanpa batas",

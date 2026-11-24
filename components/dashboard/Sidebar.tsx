@@ -81,7 +81,7 @@ export default function Sidebar({
 
       {/* Sidebar Container: Fixed height with flex-col & overflow management */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 h-screen max-h-screen bg-[#FAF8F5] border-r border-[#E8ECE8] flex flex-col justify-between p-4 sm:p-5 transition-transform duration-300 ease-in-out md:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 h-dvh max-h-dvh bg-[#FAF8F5] pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] border-r border-[#E8ECE8] flex flex-col justify-between px-4 sm:px-5 transition-transform duration-300 ease-in-out md:translate-x-0 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -93,7 +93,7 @@ export default function Sidebar({
           </div>
 
           {/* Navigation Menu with independent smooth scroll */}
-          <nav className="flex-1 overflow-y-auto space-y-1 pr-1 -mr-1 py-1">
+          <nav className="flex-1 overflow-y-auto overscroll-contain space-y-1 pr-1 -mr-1 py-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -103,7 +103,7 @@ export default function Sidebar({
                   type="button"
                   onClick={() => handleNavClick(item.id)}
                   aria-current={isActive ? "page" : undefined}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                  className={`w-full min-h-11 flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer ${
                     isActive
                       ? "bg-[#E5ECE6] text-[#1E3A2B] shadow-2xs font-bold"
                       : "text-[#586C5E] hover:text-[#1E3A2B] hover:bg-black/[0.03]"
@@ -143,7 +143,7 @@ export default function Sidebar({
           <div className="space-y-0.5">
             <button
               type="button"
-              onClick={() => setActiveTab("settings")}
+              onClick={() => handleNavClick("settings")}
               className={`w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#586C5E] hover:text-[#1E3A2B] hover:bg-black/[0.03] transition-colors cursor-pointer ${
                 activeTab === "settings" ? "bg-[#E5ECE6] text-[#1E3A2B] font-bold" : ""
               }`}
@@ -154,7 +154,7 @@ export default function Sidebar({
 
             <button
               type="button"
-              onClick={() => setActiveTab("help")}
+              onClick={() => handleNavClick("help")}
               className={`w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#586C5E] hover:text-[#1E3A2B] hover:bg-black/[0.03] transition-colors cursor-pointer ${
                 activeTab === "help" ? "bg-[#E5ECE6] text-[#1E3A2B] font-bold" : ""
               }`}

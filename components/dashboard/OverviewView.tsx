@@ -27,9 +27,9 @@ const categoryBadges: Record<string, { bg: string; text: string }> = {
 function dueLabel(daysUntil: number, dueDate: string): string {
   const date = formatShortDate(dueDate);
   if (daysUntil < 0) return `Overdue since ${date}`;
-  if (daysUntil === 0) return `Due ${date} Â· Today`;
-  if (daysUntil === 1) return `Due ${date} Â· Tomorrow`;
-  return `Due ${date} Â· In ${daysUntil} days`;
+  if (daysUntil === 0) return `Due ${date} · Today`;
+  if (daysUntil === 1) return `Due ${date} · Tomorrow`;
+  return `Due ${date} · In ${daysUntil} days`;
 }
 
 export default function OverviewView({ onSwitchTab, onOpenAddExpense }: OverviewViewProps) {
@@ -97,7 +97,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
           <p className="text-2xl sm:text-3xl font-extrabold text-[#1E3A2B] tracking-tight mt-1.5">
             {formatRupiah(income)}
           </p>
-          <p className="text-xs text-[#7D9183] mt-2">Next allowance Â· {nextAllowanceLabel}</p>
+          <p className="text-xs text-[#7D9183] mt-2">Next allowance · {nextAllowanceLabel}</p>
         </div>
 
         {/* Card 2: Spent this month */}
@@ -147,7 +147,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
                   {formatRupiah(dailyLimit)}
                 </p>
                 <p className="text-xs text-[#5C7063] mt-1 font-medium">
-                  {formatRupiah(Math.max(0, balanceAtDayStart))} remaining Ã· {daysLeft}{" "}
+                  {formatRupiah(Math.max(0, balanceAtDayStart))} remaining ÷ {daysLeft}{" "}
                   {daysLeft === 1 ? "day" : "days"}
                 </p>
 
@@ -157,8 +157,8 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
                     className={`text-xs font-semibold ${overToday ? "text-[#B4491F]" : "text-[#244833]"}`}
                   >
                     {overToday
-                      ? `${formatRupiah(spentToday)} spent today Â· ${formatRupiah(-leftToday)} over the limit`
-                      : `${formatRupiah(spentToday)} spent today Â· ${formatRupiah(leftToday)} left`}
+                      ? `${formatRupiah(spentToday)} spent today · ${formatRupiah(-leftToday)} over the limit`
+                      : `${formatRupiah(spentToday)} spent today · ${formatRupiah(leftToday)} left`}
                   </p>
                   <div className="w-full h-2 rounded-full bg-white/70 overflow-hidden mt-1.5">
                     <div
@@ -249,7 +249,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
             <button
               type="button"
               onClick={() => onSwitchTab("expenses")}
-              className="text-xs font-semibold text-[#1E3A2B] hover:underline flex items-center gap-1 cursor-pointer"
+              className="min-h-11 md:min-h-0 text-xs font-semibold text-[#1E3A2B] hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>View all</span>
               <ArrowRight className="w-3 h-3" />
@@ -317,7 +317,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
               <button
                 type="button"
                 onClick={() => onSwitchTab("bills")}
-                className="text-xs font-semibold text-[#1E3A2B] hover:underline flex items-center gap-1 cursor-pointer"
+                className="min-h-11 md:min-h-0 text-xs font-semibold text-[#1E3A2B] hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <span>All bills</span>
                 <ArrowRight className="w-3 h-3" />
@@ -375,7 +375,7 @@ export default function OverviewView({ onSwitchTab, onOpenAddExpense }: Overview
                   </div>
 
                   <div className="mt-3 flex items-center justify-between text-[11px]">
-                    <span className="text-[#6C8072]">{goalPercent}% saved Â· separate from allowance</span>
+                    <span className="text-[#6C8072]">{goalPercent}% saved · separate from allowance</span>
                     <button
                       type="button"
                       onClick={() => onSwitchTab("savings")}

@@ -98,7 +98,7 @@ export default function AIAssistantView() {
 
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const [loadedKey, setLoadedKey] = useState<string | null>(null);
 
   // Load saved chat history for this account (deferred so setState is not called synchronously in the effect)
@@ -137,8 +137,10 @@ export default function AIAssistantView() {
     setMessages((prev) => prev.filter((m) => m.id === "welcome"));
   };
 
+  // Scroll only the message list (not the whole page, which jumps on iOS Safari)
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    const el = listRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
 
   const sendMessage = async (text: string) => {
@@ -207,7 +209,7 @@ export default function AIAssistantView() {
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Top Banner */}
-      <div className="bg-[#EBF1EC] rounded-2xl p-6 border border-[#DCE5DE] flex items-center justify-between">
+      <div className="bg-[#EBF1EC] rounded-2xl p-4 sm:p-6 border border-[#DCE5DE] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[#244833] text-white flex items-center justify-center">
             <Sparkles className="w-5 h-5" />
@@ -223,7 +225,7 @@ export default function AIAssistantView() {
         <button
           type="button"
           onClick={clearHistory}
-          className="flex-shrink-0 flex items-center gap-1.5 text-[11px] font-medium text-[#596D5F] hover:text-[#1E3A2B] hover:bg-[#DCE5DE] px-3 py-1.5 rounded-full transition-colors cursor-pointer"
+          className="flex-shrink-0 self-start sm:self-auto flex items-center gap-1.5 text-[11px] font-medium text-[#596D5F] hover:text-[#1E3A2B] hover:bg-[#DCE5DE] px-3 py-2 min-h-10 rounded-full transition-colors cursor-pointer"
         >
           <Trash2 className="w-3.5 h-3.5" />
           Hapus riwayat
@@ -231,9 +233,15 @@ export default function AIAssistantView() {
       </div>
 
       {/* Chat Container */}
-      <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#E7EDE7] shadow-2xs flex flex-col h-[520px]">
+      <div className="bg-white rounded-3xl p-4 sm:p-7 border border-[#E7EDE7] shadow-2xs flex flex-col h-[70dvh] min-h-[420px] sm:h-[520px]">
         {/* Messages list */}
-        <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+        <div
+          ref={listRef}
+          role="log"
+          aria-live="polite"
+          aria-label="Percakapan dengan asisten AI"
+          className="flex-1 overflow-y-auto overscroll-contain space-y-4 pr-1 sm:pr-2"
+        >
           {messages.map((m) => {
             const isAi = m.sender === "ai";
             return (
@@ -248,7 +256,7 @@ export default function AIAssistantView() {
                 )}
 
                 <div
-                  className={`max-w-lg rounded-2xl p-4 text-xs sm:text-sm leading-relaxed ${
+                  className={`max-w-[85%] sm:max-w-lg break-words rounded-2xl p-3.5 sm:p-4 text-sm leading-relaxed ${
                     isAi
                       ? m.isError
                         ? "bg-red-50 text-red-700 border border-red-200"
@@ -286,7 +294,6 @@ export default function AIAssistantView() {
               </div>
             </div>
           )}
-          <div ref={bottomRef} />
         </div>
 
         {/* Quick Suggestions */}
@@ -297,7 +304,7 @@ export default function AIAssistantView() {
               type="button"
               disabled={loading}
               onClick={() => void sendMessage(q)}
-              className="flex-shrink-0 text-[11px] font-medium text-[#244833] bg-[#E8EFEA] hover:bg-[#DCE6DF] px-3 py-1.5 rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-shrink-0 text-[11px] font-medium text-[#244833] bg-[#E8EFEA] hover:bg-[#DCE6DF] px-3.5 py-2 min-h-10 rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {q}
             </button>
@@ -308,16 +315,20 @@ export default function AIAssistantView() {
         <form onSubmit={handleSend} className="relative flex items-center gap-2 pt-2">
           <input
             type="text"
+            aria-label="Tulis pertanyaanmu untuk asisten AI"
+            enterKeyHint="send"
+            autoComplete="off"
             placeholder="Tanyakan rekomendasi atau hitung pengeluaran..."
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             disabled={loading}
-            className="flex-1 bg-[#FAF8F5] border border-[#D7E2D9] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#1E3A2B] placeholder:text-gray-400 focus:outline-none focus:border-[#224431] disabled:opacity-60"
+            className="flex-1 min-w-0 min-h-11 bg-[#FAF8F5] border border-[#D7E2D9] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#1E3A2B] placeholder:text-gray-400 focus:outline-none focus:border-[#224431] disabled:opacity-60"
           />
           <button
             type="submit"
             disabled={loading || !inputMessage.trim()}
-            className="p-3 rounded-xl bg-[#224431] text-white hover:bg-[#163323] transition-colors shadow-xs cursor-pointer flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Kirim pesan"
+            className="w-11 h-11 flex items-center justify-center rounded-xl bg-[#224431] text-white hover:bg-[#163323] transition-colors shadow-xs cursor-pointer flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send className="w-4 h-4" />
           </button>
