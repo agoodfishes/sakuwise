@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
 import HeroDashboardMockup from "@/components/HeroDashboardMockup";
+import GoogleIcon from "@/components/GoogleIcon";
 import { useAuth } from "@/context/AuthContext";
 import {
   ArrowLeft,
@@ -16,7 +17,7 @@ import {
 } from "lucide-react";
 
 export default function LoginPage() {
-  const { loginWithEmail, signUpWithEmail, isLoading } = useAuth();
+  const { loginWithEmail, signUpWithEmail, loginWithGoogle, isLoading } = useAuth();
 
   const pathname = usePathname();
   const [mode, setMode] = useState<"login" | "signup">(
@@ -58,6 +59,14 @@ export default function LoginPage() {
       if (!res.success && res.error) {
         setErrorMessage(res.error);
       }
+    }
+  };
+
+  const handleGoogle = async () => {
+    setErrorMessage(null);
+    const res = await loginWithGoogle();
+    if (!res.success && res.error) {
+      setErrorMessage(res.error);
     }
   };
 
@@ -221,6 +230,24 @@ export default function LoginPage() {
               )}
             </button>
           </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-[#E3EAE5]" />
+            <span className="text-xs text-[#7A8E80] font-medium">atau</span>
+            <div className="flex-1 h-px bg-[#E3EAE5]" />
+          </div>
+
+          {/* Google Sign In */}
+          <button
+            type="button"
+            onClick={handleGoogle}
+            disabled={isLoading}
+            className="w-full py-3.5 px-4 rounded-xl text-sm font-bold text-[#1E3A2B] bg-white border border-[#D5E1D7] hover:bg-[#FAF8F5] transition-all duration-200 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-70"
+          >
+            <GoogleIcon className="w-5 h-5" />
+            <span>Lanjutkan dengan Google</span>
+          </button>
 
           {/* Toggle Login / Sign Up */}
           <div className="mt-6 text-center">

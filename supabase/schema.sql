@@ -80,3 +80,34 @@ begin
     );
   end loop;
 end $$;
+
+-- ---------- Profiles (username for login) ----------
+create table if not exists public.profiles (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  username text not null unique check (username ~ '^[a-z0-9_]{3,20}$'),
+  created_at timestamptz not null default now()
+);
+
+alter table public.profiles enable row level security;
+
+drop policy if exists "own profile" on public.profiles;
+create policy "own profile" on public.profiles for all to authenticated
+  using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+-- Look up the email for a username so the login form can sign in by username.
+-- Runs as definer because anonymous visitors cannot read profiles directly.
+create or replace function public.email_for_username(p_username text)
+returns text
+language sql
+security definer
+set search_path = public, auth
+as $$
+  select u.email::text
+  from public.profiles p
+  join auth.users u on u.id = p.user_id
+  where p.username = lower(p_username)
+  limit 1;
+$$;
+
+revoke all on function public.email_for_username(text) from public;
+grant execute on function public.email_for_username(text) to anon, authenticated;

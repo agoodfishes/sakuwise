@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { supabase, isSupabaseConfigured } from "@/lib/supabaseClient";
 
 export interface User {
@@ -22,7 +23,9 @@ interface AuthContextType {
   isLoading: boolean;
   loginWithEmail: (email: string, pass: string, remember?: boolean) => Promise<AuthResponse>;
   signUpWithEmail: (name: string, email: string, pass: string) => Promise<AuthResponse>;
-  loginWithGoogle: (customData?: Partial<User>) => Promise<void>;
+  loginWithGoogle: () => Promise<AuthResponse>;
+  needsSetup: boolean;
+  completeGoogleSetup: (username: string, pass: string) => Promise<AuthResponse>;
   logout: () => void;
 }
 
@@ -67,6 +70,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // true: Google user who has not chosen a username/password yet
+  const [needsSetup, setNeedsSetup] = useState(false);
   // true: session survives closing the browser (localStorage); false: only this browser session (sessionStorage)
   const rememberRef = useRef(true);
   const router = useRouter();
@@ -94,11 +99,58 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (e) {
         console.error("Failed to load auth session", e);
       } finally {
-        setIsLoading(false);
+        // When Supabase is configured, the Supabase session effect below ends the loading state
+        if (!isSupabaseConfigured || !supabase) setIsLoading(false);
       }
     }, 0);
 
     return () => clearTimeout(timer);
+  }, []);
+
+  // Sync the Supabase session (needed after the redirect back from Google OAuth)
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return;
+    const client = supabase;
+
+    const toUser = (u: SupabaseUser): User => ({
+      id: u.id,
+      name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split("@")[0] || "Pengguna",
+      email: u.email || "",
+      avatar: u.user_metadata?.avatar_url || u.user_metadata?.picture,
+      role: "Personal account",
+    });
+
+    const checkProfile = async (u: SupabaseUser) => {
+      if (u.app_metadata?.provider !== "google") return;
+      const { data, error } = await client
+        .from("profiles")
+        .select("user_id")
+        .eq("user_id", u.id)
+        .maybeSingle();
+      if (!error) setNeedsSetup(!data);
+    };
+
+    client.auth
+      .getSession()
+      .then(({ data }) => {
+        if (data.session?.user) {
+          setUser(toUser(data.session.user));
+          checkProfile(data.session.user);
+        }
+      })
+      .catch((e) => console.error("Failed to read Supabase session", e))
+      .finally(() => setIsLoading(false));
+
+    const { data: sub } = client.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const u = session.user;
+        setUser(toUser(u));
+        // Deferred: do not call Supabase inside the auth callback itself
+        setTimeout(() => checkProfile(u), 0);
+      }
+    });
+
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   const getAccountsDb = () => {
@@ -134,6 +186,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   ): Promise<AuthResponse> => {
     rememberRef.current = remember;
     setIsLoading(true);
+
+    // A plain username (no @) is resolved to its email through the database
+    if (!email.includes("@")) {
+      const username = email.trim().toLowerCase();
+      let resolved: string | null = null;
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { data } = await supabase.rpc("email_for_username", { p_username: username });
+          if (typeof data === "string" && data) resolved = data;
+        } catch (err: unknown) {
+          console.warn("Username lookup failed", err);
+        }
+      }
+      email = resolved ?? `${username}@sakuwise.id`;
+    }
 
     // If Supabase is configured with valid credentials, try Supabase Auth first
     if (isSupabaseConfigured && supabase) {
@@ -303,27 +370,70 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   // 3. Google OAuth Login
-  const loginWithGoogle = async (customData?: Partial<User>) => {
-    setIsLoading(true);
-    await new Promise((r) => setTimeout(r, 500));
+  const loginWithGoogle = async (): Promise<AuthResponse> => {
+    if (!isSupabaseConfigured || !supabase) {
+      return {
+        success: false,
+        error: "Supabase belum dikonfigurasi. Isi NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY di .env.local.",
+      };
+    }
 
-    const loggedUser: User = {
-      id: "google_10928374",
-      name: "Najwa",
-      email: "najwa.finance@student.ac.id",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-      role: "Student account",
-      ...customData,
-    };
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/dashboard` },
+    });
 
-    saveSession(loggedUser);
-    setIsLoading(false);
-    router.push("/dashboard");
+    // On success the browser is redirected to Google, so nothing else runs here
+    if (error) return { success: false, error: error.message };
+    return { success: true };
   };
 
-  // 4. Logout
+  // 4. Finish Google account: choose a username and a password
+  const completeGoogleSetup = async (username: string, pass: string): Promise<AuthResponse> => {
+    if (!isSupabaseConfigured || !supabase || !user) {
+      return { success: false, error: "Sesi tidak ditemukan. Silakan masuk lagi." };
+    }
+
+    const uname = username.trim().toLowerCase();
+    if (!/^[a-z0-9_]{3,20}$/.test(uname)) {
+      return {
+        success: false,
+        error: "Username 3-20 karakter: huruf kecil, angka, atau garis bawah (_).",
+      };
+    }
+    if (pass.length < 6) {
+      return { success: false, error: "Kata sandi minimal 6 karakter." };
+    }
+
+    // Username first, so a taken username does not change the password
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .insert({ user_id: user.id, username: uname });
+    if (profileError) {
+      return {
+        success: false,
+        error:
+          profileError.code === "23505"
+            ? "Username sudah dipakai. Coba yang lain."
+            : profileError.message,
+      };
+    }
+
+    const { error: passError } = await supabase.auth.updateUser({ password: pass });
+    if (passError) {
+      // Roll back so the user can retry with the same username
+      await supabase.from("profiles").delete().eq("user_id", user.id);
+      return { success: false, error: passError.message };
+    }
+
+    setNeedsSetup(false);
+    return { success: true };
+  };
+
+  // 5. Logout
   const logout = () => {
     setUser(null);
+    setNeedsSetup(false);
     try {
       localStorage.removeItem("sakuwise_auth_user");
       sessionStorage.removeItem("sakuwise_auth_user");
@@ -345,6 +455,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         loginWithEmail,
         signUpWithEmail,
         loginWithGoogle,
+        needsSetup,
+        completeGoogleSetup,
         logout,
       }}
     >

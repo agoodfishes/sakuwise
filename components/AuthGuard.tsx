@@ -3,10 +3,11 @@
 import React, { useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import GoogleSetupModal from "@/components/GoogleSetupModal";
 
 // Only renders its children for a signed-in user; everyone else is sent to /login.
 export default function AuthGuard({ children }: { children: ReactNode }) {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, needsSetup } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -17,5 +18,10 @@ export default function AuthGuard({ children }: { children: ReactNode }) {
     return <div className="min-h-screen bg-[#FAF8F5]" />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      {needsSetup && <GoogleSetupModal />}
+    </>
+  );
 }
