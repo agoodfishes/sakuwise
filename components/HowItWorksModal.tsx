@@ -17,20 +17,20 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
     {
       step: "01",
       icon: Wallet,
-      title: "Bagi Uang ke Saku Sesuai Posnya",
-      desc: "Saat gaji atau penghasilan masuk, bagi ke beberapa saku: Saku Makan, Cicilan, Hiburan, hingga Tabungan. Tidak ada lagi dana yang tercampur aduk.",
-      tip: "Metode 50/30/20 otomatis direkomendasikan untuk pemula.",
+      title: "Split Your Money into the Right Pockets",
+      desc: "When your salary or income arrives, split it into pockets: Food Budget, Installments, Entertainment, and Savings. No more mixed-up funds.",
+      tip: "The 50/30/20 method is automatically recommended for beginners.",
       mockVisual: (
         <div className="bg-[#FAF8F5] p-4 rounded-xl border border-[#E3EAE4] space-y-2.5">
           <div className="flex justify-between items-center text-xs font-semibold text-[#1E3A2B]">
-            <span>Saku Kebutuhan Pokok</span>
+            <span>Essentials Pocket</span>
             <span className="text-[#20743E]">Rp 4.500.000 (50%)</span>
           </div>
           <div className="w-full bg-[#E5EDE7] h-2 rounded-full overflow-hidden">
             <div className="bg-[#224431] h-full w-1/2 rounded-full" />
           </div>
           <div className="flex justify-between items-center text-xs font-semibold text-[#1E3A2B] pt-2">
-            <span>Saku Hiburan & Gaya Hidup</span>
+            <span>Entertainment & Lifestyle Pocket</span>
             <span className="text-[#E08C38]">Rp 2.700.000 (30%)</span>
           </div>
           <div className="w-full bg-[#E5EDE7] h-2 rounded-full overflow-hidden">
@@ -42,9 +42,9 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
     {
       step: "02",
       icon: PieChart,
-      title: "Catat & Sadari Kemana Uang Pergi",
-      desc: "Setiap transaksi otomatis mengurangi saldo saku terkait. Kamu langsung tahu sisa kuota belanja tanpa rasa bersalah.",
-      tip: "Notifikasi ramah saat saku belanja sudah mendekati 85%.",
+      title: "Track & Be Aware of Where Your Money Goes",
+      desc: "Every transaction automatically reduces the balance of its pocket. You instantly know your remaining spending allowance, guilt-free.",
+      tip: "Friendly notifications when a spending pocket reaches 85%.",
       mockVisual: (
         <div className="bg-[#FAF8F5] p-4 rounded-xl border border-[#E3EAE4] space-y-3">
           <div className="flex items-center gap-3">
@@ -52,8 +52,8 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
               🍔
             </div>
             <div className="flex-1">
-              <p className="text-xs font-bold text-[#1E3A2B]">Kopi & Sarapan</p>
-              <p className="text-[10px] text-gray-500">Saku Makan • Hari ini</p>
+              <p className="text-xs font-bold text-[#1E3A2B]">Coffee & Breakfast</p>
+              <p className="text-[10px] text-gray-500">Food Budget • Today</p>
             </div>
             <span className="text-xs font-bold text-red-600">-Rp 45.000</span>
           </div>
@@ -62,8 +62,8 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
               ⚡
             </div>
             <div className="flex-1">
-              <p className="text-xs font-bold text-[#1E3A2B]">Token Listrik</p>
-              <p className="text-[10px] text-gray-500">Saku Tagihan • Kemarin</p>
+              <p className="text-xs font-bold text-[#1E3A2B]">Electricity Token</p>
+              <p className="text-[10px] text-gray-500">Bills Pocket • Yesterday</p>
             </div>
             <span className="text-xs font-bold text-red-600">-Rp 200.000</span>
           </div>
@@ -73,20 +73,20 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
     {
       step: "03",
       icon: Sparkles,
-      title: "Wujudkan Target Tanpa Beban",
-      desc: "Kunci dana impian di saku target terproteksi. Pantau grafiknya tumbuh dari minggu ke minggu sampai tujuanmu tercapai.",
-      tip: "Fitur 'Kunci Saku' mencegah dana tabungan terpakai impulsif.",
+      title: "Reach Your Goals Stress-Free",
+      desc: "Lock your dream fund in a protected goal pocket. Watch the chart grow week by week until you reach your goal.",
+      tip: "The 'Lock Pocket' feature prevents savings from being spent impulsively.",
       mockVisual: (
         <div className="bg-[#1E3A2B] text-white p-4 rounded-xl space-y-3 shadow-md">
           <div className="flex justify-between items-center text-xs">
-            <span className="font-bold">🎯 Tabungan Liburan Jepang</span>
+            <span className="font-bold">🎯 Japan Vacation Savings</span>
             <span className="text-[#E08C38] font-bold">85%</span>
           </div>
           <div className="w-full bg-[#12241A] h-2 rounded-full overflow-hidden">
             <div className="bg-[#E08C38] h-full w-[85%] rounded-full" />
           </div>
           <p className="text-[11px] text-emerald-100/70">
-            Terkumpul Rp 17.000.000 dari target Rp 20.000.000. Kurang 2 bulan lagi!
+            Saved Rp 17.000.000 of the Rp 20.000.000 goal. Just 2 more months to go!
           </p>
         </div>
       ),
@@ -95,22 +95,22 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] bg-black/50 backdrop-blur-xs animate-in fade-in duration-200">
-      <div role="dialog" aria-modal="true" aria-label="Cara Kerja Sakuwise" className="relative w-full max-w-2xl max-h-[calc(100dvh-2rem)] flex flex-col bg-white rounded-3xl shadow-2xl border border-[#DEE6DF] overflow-hidden">
+      <div role="dialog" aria-modal="true" aria-label="How Sakuwise Works" className="relative w-full max-w-2xl max-h-[calc(100dvh-2rem)] flex flex-col bg-white rounded-3xl shadow-2xl border border-[#DEE6DF] overflow-hidden">
         
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#EBEFEA] bg-[#FAF8F5]">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#738777]">
-              Panduan Cepat
+              Quick Guide
             </span>
             <h3 className="text-lg font-bold text-[#1E3A2B]">
-              Cara Kerja Sakuwise
+              How Sakuwise Works
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Tutup"
+            aria-label="Close"
             className="min-w-11 min-h-11 -mr-2 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 hover:bg-black/5 transition-colors"
           >
             <X className="w-5 h-5" />
@@ -129,7 +129,7 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
                   : "text-[#6E8172] hover:text-[#1E3A2B]"
               }`}
             >
-              <span>Langkah {s.step}</span>
+              <span>Step {s.step}</span>
             </button>
           ))}
         </div>
@@ -159,7 +159,7 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
           <div className="mt-5 p-3.5 rounded-xl bg-[#FEF7EC] border border-[#FDE6C8] flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-[#D97706] flex-shrink-0 mt-0.5" />
             <p className="text-xs text-[#92400E] leading-relaxed">
-              <strong className="font-semibold">Tips Bijak: </strong>
+              <strong className="font-semibold">Smart Tip: </strong>
               {steps[activeStep].tip}
             </p>
           </div>
@@ -178,7 +178,7 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
                 : "text-[#1E3A2B] hover:bg-black/5"
             }`}
           >
-            Kembali
+            Back
           </button>
 
           {activeStep < steps.length - 1 ? (
@@ -186,7 +186,7 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
               onClick={() => setActiveStep((prev) => prev + 1)}
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#224431] hover:bg-[#163323] px-4 py-2 rounded-xl transition-all"
             >
-              <span>Langkah Berikutnya</span>
+              <span>Next Step</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           ) : (
@@ -194,7 +194,7 @@ export default function HowItWorksModal({ isOpen, onClose }: HowItWorksModalProp
               onClick={onClose}
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#224431] hover:bg-[#163323] px-5 py-2 rounded-xl transition-all shadow"
             >
-              <span>Mulai Pakai Sekarang</span>
+              <span>Start Using Now</span>
             </button>
           )}
         </div>

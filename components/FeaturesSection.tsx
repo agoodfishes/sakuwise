@@ -18,28 +18,28 @@ export default function FeaturesSection({ onSelectFeature }: FeaturesSectionProp
     {
       id: "saku-otomatis",
       icon: CalendarDays,
-      title: "Pembagian Saku Otomatis",
+      title: "Automatic Pocket Allocation",
       description:
-        "Pisahkan uang untuk kebutuhan, keinginan, dan tabungan. Setiap rupiah punya tujuan.",
-      cta: "Kenali Saku Anggaran",
-      badge: "Fondasi Budgeting",
+        "Separate your money for needs, wants, and savings. Every rupiah has a purpose.",
+      cta: "Explore Budget Pockets",
+      badge: "Budgeting Foundation",
     },
     {
       id: "analisis-realtime",
       icon: BarChart3,
-      title: "Analisis Pengeluaran Real-time",
+      title: "Real-time Spending Analysis",
       description:
-        "Lihat ke mana uangmu pergi lewat ringkasan yang jelas. Ambil keputusan lebih percaya diri.",
-      cta: "Pahami arus kasmu",
-      badge: "Insight Instan",
+        "See where your money goes with clear summaries. Make decisions with more confidence.",
+      cta: "Understand your cash flow",
+      badge: "Instant Insights",
     },
     {
       id: "target-impian",
       icon: Target,
-      title: "Target Tabungan Impian",
+      title: "Dream Savings Goals",
       description:
-        "Liburan, rumah, atau dana darurat. Bangun kebiasaan baik, selangkah lebih dekat tiap hari.",
-      cta: "Wujudkan tujuanmu",
+        "A vacation, a home, or an emergency fund. Build good habits and get a step closer every day.",
+      cta: "Reach your goals",
       badge: "Goal Tracker",
     },
   ];
@@ -51,14 +51,14 @@ export default function FeaturesSection({ onSelectFeature }: FeaturesSectionProp
         {/* Section Header */}
         <div className="max-w-2xl mb-14 sm:mb-16">
           <p className="text-xs font-bold uppercase tracking-widest text-[#6E8172]">
-            Lebih Rapi, Lebih Tenang.
+            Neater, Calmer.
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#1E3A2B] tracking-tight mt-2.5 leading-tight">
-            Satu tempat, lebih banyak kendali.
+            One place, more control.
           </h2>
           <p className="text-base sm:text-lg text-[#55695C] mt-3.5 leading-relaxed">
-            Dari kebutuhan hari ini sampai mimpi di masa depan, atur semuanya
-            dengan bijak.
+            From today&apos;s needs to tomorrow&apos;s dreams, manage it all
+            wisely.
           </p>
         </div>
 
@@ -105,7 +105,7 @@ export default function FeaturesSection({ onSelectFeature }: FeaturesSectionProp
         {/* Security & Ownership Trust Banner */}
         <div className="mt-14 sm:mt-16 flex items-center justify-center gap-2 text-xs sm:text-sm text-[#617465] font-medium text-center">
           <ShieldCheck className="w-4 h-4 text-[#20743E] stroke-[2.5]" />
-          <span>Data tetap milikmu. Rencanamu tetap di tanganmu.</span>
+          <span>Your data stays yours. Your plans stay in your hands.</span>
         </div>
 
       </div>

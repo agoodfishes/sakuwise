@@ -14,7 +14,7 @@ interface ChatMessage {
 }
 
 const nowTime = () =>
-  new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+  new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 
 const CHAT_STORAGE_KEY = "sakuwise_ai_chat";
 const MAX_SAVED_MESSAGES = 50;
@@ -33,7 +33,7 @@ function isChatMessage(v: unknown): v is ChatMessage {
 export default function AIAssistantView() {
   const { user } = useAuth();
   const { summary, income, transactions, goals } = useFinance();
-  const userName = user?.name || "kamu";
+  const userName = user?.name || "there";
   const storageKey = user?.email ? `${CHAT_STORAGE_KEY}:${user.email}` : null;
 
   // Compact snapshot of the user's real finance data, sent to the server as context for the AI
@@ -87,11 +87,11 @@ export default function AIAssistantView() {
     {
       id: "welcome",
       sender: "ai",
-      text: `Halo ${userName}! Saya asisten finansial SakuWise. Sejauh ini kamu sudah menghabiskan ${formatRupiah(
+      text: `Hi ${userName}! I'm your SakuWise financial assistant. So far you've spent ${formatRupiah(
         summary.totalSpent
-      )} dari uang saku ${formatRupiah(income)}. Batas pengeluaran harianmu sekarang ${formatRupiah(
+      )} of your allowance of ${formatRupiah(income)}. Your daily spending limit is now ${formatRupiah(
         summary.dailyLimit
-      )} untuk ${summary.daysLeft} hari ke depan. Ada yang ingin kamu diskusikan?`,
+      )} for the next ${summary.daysLeft} days. Anything you'd like to discuss?`,
       time: nowTime(),
     },
   ]);
@@ -133,7 +133,7 @@ export default function AIAssistantView() {
   }, [messages, storageKey, loadedKey]);
 
   const clearHistory = () => {
-    if (!window.confirm("Hapus seluruh riwayat chat dengan asisten AI?")) return;
+    if (!window.confirm("Delete the entire chat history with the AI assistant?")) return;
     setMessages((prev) => prev.filter((m) => m.id === "welcome"));
   };
 
@@ -172,7 +172,7 @@ export default function AIAssistantView() {
       const data = (await res.json().catch(() => ({}))) as { reply?: string; error?: string };
 
       if (!res.ok || !data.reply) {
-        throw new Error(data.error || "Gagal mendapatkan jawaban dari asisten AI.");
+        throw new Error(data.error || "Failed to get a response from the AI assistant.");
       }
 
       setMessages((prev) => [
@@ -185,7 +185,7 @@ export default function AIAssistantView() {
         {
           id: `e-${Date.now()}`,
           sender: "ai",
-          text: e instanceof Error ? e.message : "Terjadi kesalahan. Coba lagi nanti.",
+          text: e instanceof Error ? e.message : "Something went wrong. Please try again later.",
           time: nowTime(),
           isError: true,
         },
@@ -201,9 +201,9 @@ export default function AIAssistantView() {
   };
 
   const quickQuestions = [
-    "Bagaimana evaluasi pengeluaran saya bulan ini?",
-    "Kategori mana yang hampir melebihi budget?",
-    "Simulasikan jika saya belanja Rp100.000 hari ini",
+    "How is my spending this month?",
+    "Which category is close to exceeding its budget?",
+    "Simulate what happens if I spend Rp100.000 today",
   ];
 
   return (
@@ -217,8 +217,8 @@ export default function AIAssistantView() {
           <div>
             <h3 className="text-base font-bold text-[#1E3A2B]">SakuWise AI Smart Advisor</h3>
             <p className="text-xs text-[#596D5F]">
-              Didukung Gemini. Ringkasan keuanganmu (tanpa email atau data akun) dikirim ke layanan AI
-              hanya saat kamu mengirim pesan.
+              Powered by Gemini. A summary of your finances (without your email or account data) is sent to the AI service
+              only when you send a message.
             </p>
           </div>
         </div>
@@ -228,7 +228,7 @@ export default function AIAssistantView() {
           className="flex-shrink-0 self-start sm:self-auto flex items-center gap-1.5 text-[11px] font-medium text-[#596D5F] hover:text-[#1E3A2B] hover:bg-[#DCE5DE] px-3 py-2 min-h-10 rounded-full transition-colors cursor-pointer"
         >
           <Trash2 className="w-3.5 h-3.5" />
-          Hapus riwayat
+          Clear history
         </button>
       </div>
 
@@ -239,7 +239,7 @@ export default function AIAssistantView() {
           ref={listRef}
           role="log"
           aria-live="polite"
-          aria-label="Percakapan dengan asisten AI"
+          aria-label="Conversation with the AI assistant"
           className="flex-1 overflow-y-auto overscroll-contain space-y-4 pr-1 sm:pr-2"
         >
           {messages.map((m) => {
@@ -290,7 +290,7 @@ export default function AIAssistantView() {
               </div>
               <div className="rounded-2xl p-4 text-xs sm:text-sm bg-[#FAF8F5] text-[#596D5F] border border-[#E7EDE7] flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Sedang menganalisis keuanganmu...
+                Analyzing your finances...
               </div>
             </div>
           )}
@@ -315,10 +315,10 @@ export default function AIAssistantView() {
         <form onSubmit={handleSend} className="relative flex items-center gap-2 pt-2">
           <input
             type="text"
-            aria-label="Tulis pertanyaanmu untuk asisten AI"
+            aria-label="Type your question for the AI assistant"
             enterKeyHint="send"
             autoComplete="off"
-            placeholder="Tanyakan rekomendasi atau hitung pengeluaran..."
+            placeholder="Ask for recommendations or calculate spending..."
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             disabled={loading}
@@ -327,7 +327,7 @@ export default function AIAssistantView() {
           <button
             type="submit"
             disabled={loading || !inputMessage.trim()}
-            aria-label="Kirim pesan"
+            aria-label="Send message"
             className="w-11 h-11 flex items-center justify-center rounded-xl bg-[#224431] text-white hover:bg-[#163323] transition-colors shadow-xs cursor-pointer flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send className="w-4 h-4" />

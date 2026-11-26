@@ -5,23 +5,23 @@ export default function SecuritySection() {
   const securityPillars = [
     {
       icon: Lock,
-      title: "Enkripsi Setara Perbankan",
-      desc: "Semua data transaksi dienkripsi dengan standar AES-256 dan protokol SSL/TLS termutakhir.",
+      title: "Bank-Grade Encryption",
+      desc: "All transaction data is encrypted with AES-256 and the latest SSL/TLS protocols.",
     },
     {
       icon: EyeOff,
-      title: "Privasi Tanpa Kompromi",
-      desc: "Kami tidak pernah menjual data atau riwayat belanjamu kepada pihak ketiga manapun.",
+      title: "Uncompromising Privacy",
+      desc: "We never sell your data or spending history to any third party.",
     },
     {
       icon: KeyRound,
-      title: "Otentikasi Dua Faktor (2FA)",
-      desc: "Akses akunmu terlindungi ganda dengan biometrik (FaceID/Fingerprint) dan OTP aman.",
+      title: "Two-Factor Authentication (2FA)",
+      desc: "Your account is double-protected with biometrics (FaceID/Fingerprint) and secure OTP.",
     },
     {
       icon: Shield,
-      title: "Kepatuhan Regulasi",
-      desc: "Mengikuti prinsip perlindungan data pribadi dan standar keamanan sistem finansial digital.",
+      title: "Regulatory Compliance",
+      desc: "Follows personal data protection principles and digital financial system security standards.",
     },
   ];
 
@@ -30,13 +30,13 @@ export default function SecuritySection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mb-12">
           <p className="text-xs font-bold uppercase tracking-widest text-[#6E8172]">
-            Perlindungan Maksimal
+            Maximum Protection
           </p>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E3A2B] tracking-tight mt-2.5">
-            Keamanan finansialmu adalah prioritas mutlak kami.
+            Your financial security is our top priority.
           </h2>
           <p className="text-base text-[#55695C] mt-3">
-            Sakuwise dirancang dengan arsitektur zero-trust, memastikan seluruh informasi keuanganmu selalu terlindungi.
+            Sakuwise is built on a zero-trust architecture, ensuring all your financial information is always protected.
           </p>
         </div>
 

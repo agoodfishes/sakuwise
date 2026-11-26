@@ -25,10 +25,10 @@ export default function GoogleSetupModal() {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-8 text-[#1E3A2B] shadow-xl">
-        <h2 className="text-2xl font-extrabold tracking-tight">Lengkapi akunmu</h2>
+        <h2 className="text-2xl font-extrabold tracking-tight">Complete your account</h2>
         <p className="mt-1.5 text-sm text-[#5B6D60] leading-relaxed">
-          Halo{user?.name ? `, ${user.name}` : ""}! Buat username dan kata sandi agar nanti bisa masuk
-          tanpa Google juga.
+          Hi{user?.name ? `, ${user.name}` : ""}! Create a username and password so you can also log in
+          without Google later.
         </p>
 
         {errorMessage && (
@@ -53,18 +53,18 @@ export default function GoogleSetupModal() {
                 type="text"
                 autoComplete="username"
                 required
-                placeholder="contoh: najwa_01"
+                placeholder="e.g. najwa_01"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-[#D5E1D7] text-base sm:text-sm font-medium focus:outline-none focus:border-[#224431] focus:ring-2 focus:ring-[#224431]/40 bg-[#FAF8F5]/60 focus:bg-white transition-all"
               />
             </div>
-            <p className="mt-1 text-[11px] text-[#7A8E80]">3-20 karakter: huruf kecil, angka, atau _</p>
+            <p className="mt-1 text-[11px] text-[#7A8E80]">3-20 characters: lowercase letters, numbers, or _</p>
           </div>
 
           <div>
             <label htmlFor="setup-password" className="text-xs font-bold block mb-1.5">
-              Kata sandi
+              Password
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-[#8C9E91] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -73,7 +73,7 @@ export default function GoogleSetupModal() {
                 type={showPassword ? "text" : "password"}
                 autoComplete="new-password"
                 required
-                placeholder="Minimal 6 karakter"
+                placeholder="At least 6 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-10 pr-10 py-3 rounded-xl border border-[#D5E1D7] text-base sm:text-sm font-medium focus:outline-none focus:border-[#224431] focus:ring-2 focus:ring-[#224431]/40 bg-[#FAF8F5]/60 focus:bg-white transition-all"
@@ -82,7 +82,7 @@ export default function GoogleSetupModal() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8C9E91] hover:text-[#1E3A2B] cursor-pointer"
-                aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -97,7 +97,7 @@ export default function GoogleSetupModal() {
             {saving ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
             ) : (
-              "Simpan dan lanjutkan"
+              "Save and continue"
             )}
           </button>
         </form>

@@ -7,12 +7,13 @@ import { useFinance, todayISO, type TxType } from '@/context/FinanceContext';
 interface AddExpenseModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialType?: TxType;
 }
 
-export default function AddExpenseModal({ isOpen, onClose }: AddExpenseModalProps) {
+export default function AddExpenseModal({ isOpen, onClose, initialType = 'expense' }: AddExpenseModalProps) {
   const { categories, addTransaction } = useFinance();
 
-  const [type, setType] = useState<TxType>('expense');
+  const [type, setType] = useState<TxType>(initialType);
   const [amountStr, setAmountStr] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
@@ -35,7 +36,7 @@ export default function AddExpenseModal({ isOpen, onClose }: AddExpenseModalProp
     setName('');
     setNote('');
     setError('');
-    setType('expense');
+    setType(initialType);
     setDate(todayISO());
   };
 

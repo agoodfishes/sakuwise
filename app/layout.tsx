@@ -19,9 +19,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Sakuwise - Kelola Keuangan Pribadi Lebih Bijak & Terarah",
+  title: "Sakuwise - Manage Your Personal Finances Smarter & with Purpose",
   description:
-    "Bagi uang ke saku yang tepat, pahami pengeluaran, dan wujudkan tujuanmu. Semua lebih simpel bersama Sakuwise. Manage your money, wisely.",
+    "Put your money in the right pocket, understand your spending, and reach your goals. Everything is simpler with Sakuwise. Manage your money, wisely.",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -29,11 +29,11 @@ export const metadata: Metadata = {
   },
   keywords: [
     "Sakuwise",
-    "keuangan pribadi",
+    "personal finance",
     "budgeting app",
-    "pengatur keuangan",
-    "saku anggaran",
-    "fintech indonesia",
+    "money manager",
+    "budget pockets",
+    "indonesia fintech",
   ],
 };
 
@@ -44,7 +44,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="id"
+      lang="en"
       className={`${plusJakartaSans.variable} scroll-smooth`}
       data-scroll-behavior="smooth"
     >

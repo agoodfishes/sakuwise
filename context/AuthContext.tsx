@@ -43,7 +43,7 @@ const DEFAULT_USERS_DB: Record<string, { name: string; passwordHash: string; rol
   "admin@sakuwise.id": {
     name: "Admin Sakuwise",
     passwordHash: "admin123",
-    role: "Akun Sakuwise",
+    role: "Sakuwise account",
   },
   "lia@sakuwise.id": {
     name: "Lia",
@@ -114,7 +114,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const toUser = (u: SupabaseUser): User => ({
       id: u.id,
-      name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split("@")[0] || "Pengguna",
+      name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split("@")[0] || "User",
       email: u.email || "",
       avatar: u.user_metadata?.avatar_url || u.user_metadata?.picture,
       role: "Personal account",
@@ -239,7 +239,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (!normalizedEmail || !pass) {
       setIsLoading(false);
-      return { success: false, error: "Email dan kata sandi wajib diisi." };
+      return { success: false, error: "Email and password are required." };
     }
 
     const account = accounts[normalizedEmail];
@@ -247,7 +247,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
       return {
         success: false,
-        error: "Email belum terdaftar. Silakan daftar akun baru terlebih dahulu.",
+        error: "Email is not registered. Please create a new account first.",
       };
     }
 
@@ -255,7 +255,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
       return {
         success: false,
-        error: "Kata sandi salah. Silakan periksa kembali kata sandi Anda.",
+        error: "Incorrect password. Please check your password and try again.",
       };
     }
 
@@ -283,19 +283,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (!name.trim()) {
       setIsLoading(false);
-      return { success: false, error: "Nama lengkap wajib diisi." };
+      return { success: false, error: "Full name is required." };
     }
 
     const normalizedEmail = email.trim().toLowerCase();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(normalizedEmail)) {
       setIsLoading(false);
-      return { success: false, error: "Format email tidak valid." };
+      return { success: false, error: "Invalid email format." };
     }
 
     if (pass.length < 6) {
       setIsLoading(false);
-      return { success: false, error: "Kata sandi minimal 6 karakter." };
+      return { success: false, error: "Password must be at least 6 characters." };
     }
 
     // If Supabase is configured
@@ -339,7 +339,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
       return {
         success: false,
-        error: "Email sudah terdaftar. Silakan masuk menggunakan kata sandi Anda.",
+        error: "Email is already registered. Please log in with your password.",
       };
     }
 
@@ -374,7 +374,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!isSupabaseConfigured || !supabase) {
       return {
         success: false,
-        error: "Supabase belum dikonfigurasi. Isi NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY di .env.local.",
+        error: "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.",
       };
     }
 
@@ -391,18 +391,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 4. Finish Google account: choose a username and a password
   const completeGoogleSetup = async (username: string, pass: string): Promise<AuthResponse> => {
     if (!isSupabaseConfigured || !supabase || !user) {
-      return { success: false, error: "Sesi tidak ditemukan. Silakan masuk lagi." };
+      return { success: false, error: "Session not found. Please log in again." };
     }
 
     const uname = username.trim().toLowerCase();
     if (!/^[a-z0-9_]{3,20}$/.test(uname)) {
       return {
         success: false,
-        error: "Username 3-20 karakter: huruf kecil, angka, atau garis bawah (_).",
+        error: "Username must be 3-20 characters: lowercase letters, numbers, or underscore (_).",
       };
     }
     if (pass.length < 6) {
-      return { success: false, error: "Kata sandi minimal 6 karakter." };
+      return { success: false, error: "Password must be at least 6 characters." };
     }
 
     // Username first, so a taken username does not change the password
@@ -414,7 +414,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         success: false,
         error:
           profileError.code === "23505"
-            ? "Username sudah dipakai. Coba yang lain."
+            ? "Username is already taken. Please try another."
             : profileError.message,
       };
     }

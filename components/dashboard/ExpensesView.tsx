@@ -119,13 +119,13 @@ export default function ExpensesView() {
     const year = parseISODate(nextAllowanceDate).getFullYear();
     const periodLabel =
       period === "all"
-        ? "Semua waktu"
+        ? "All time"
         : period === "week"
-          ? "7 hari terakhir (sampai " + formatShortDate(today) + ")"
+          ? "Last 7 days (until " + formatShortDate(today) + ")"
           : formatShortDate(periodStart) + " - " + formatShortDate(addDays(nextAllowanceDate, -1)) + " " + year;
     const notes: string[] = [];
-    if (selectedCategory !== "all") notes.push("Kategori: " + selectedCategory);
-    if (searchTerm.trim()) notes.push("Pencarian: " + searchTerm.trim());
+    if (selectedCategory !== "all") notes.push("Category: " + selectedCategory);
+    if (searchTerm.trim()) notes.push("Search: " + searchTerm.trim());
     await exportTransactionsXlsx({
       transactions: filtered,
       periodLabel,
@@ -356,7 +356,7 @@ export default function ExpensesView() {
             {savedSuccess ? (
               <div className="py-8 text-center bg-[#E7F6EC] rounded-xl border border-[#CDEED5]">
                 <Check className="w-6 h-6 text-[#20743E] mx-auto mb-1 stroke-[3]" />
-                <p className="text-xs font-bold text-[#20743E]">Pengeluaran Disimpan!</p>
+                <p className="text-xs font-bold text-[#20743E]">Expense Saved!</p>
               </div>
             ) : (
               <form onSubmit={handlePanelSubmit} className="space-y-3.5">

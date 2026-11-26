@@ -82,9 +82,9 @@ export default function SavingsGoalsView() {
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white rounded-2xl p-6 border border-[#E7EDE7] shadow-2xs gap-4">
         <div>
-          <h2 className="text-base font-bold text-[#1E3A2B]">Target Tabungan Impian</h2>
+          <h2 className="text-base font-bold text-[#1E3A2B]">Dream Savings Goals</h2>
           <p className="text-xs text-[#6F8273]">
-            Saku terproteksi otomatis memisahkan dana impianmu dari pengeluaran harian.
+            Protected pockets automatically keep your dream funds separate from daily spending.
           </p>
         </div>
         <button
@@ -93,7 +93,7 @@ export default function SavingsGoalsView() {
           className="min-h-11 md:min-h-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[#224431] hover:bg-[#163323] transition-colors cursor-pointer self-start sm:self-auto"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>{showAdd ? "Tutup" : "Buat Target Baru"}</span>
+          <span>{showAdd ? "Close" : "Create New Goal"}</span>
         </button>
       </div>
 
@@ -105,7 +105,7 @@ export default function SavingsGoalsView() {
         >
           <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
             <div className="sm:col-span-4">
-              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Nama target *</label>
+              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Goal name *</label>
               <input
                 type="text"
                 required
@@ -116,7 +116,7 @@ export default function SavingsGoalsView() {
               />
             </div>
             <div className="sm:col-span-4">
-              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Deskripsi</label>
+              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Description</label>
               <input
                 type="text"
                 placeholder="Optional"
@@ -126,7 +126,7 @@ export default function SavingsGoalsView() {
               />
             </div>
             <div className="sm:col-span-4">
-              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Tenggat</label>
+              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Deadline</label>
               <input
                 type="text"
                 placeholder="e.g. Mar 2027"
@@ -136,7 +136,7 @@ export default function SavingsGoalsView() {
               />
             </div>
             <div className="sm:col-span-6">
-              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Nominal target *</label>
+              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Target amount *</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#1E3A2B]">
                   Rp
@@ -154,7 +154,7 @@ export default function SavingsGoalsView() {
             </div>
             <div className="sm:col-span-6">
               <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">
-                Tabungan awal (opsional)
+                Starting savings (optional)
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#1E3A2B]">
@@ -183,7 +183,7 @@ export default function SavingsGoalsView() {
               type="submit"
               className="min-h-11 md:min-h-0 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] cursor-pointer"
             >
-              Simpan target
+              Save goal
             </button>
           </div>
         </form>
@@ -192,7 +192,7 @@ export default function SavingsGoalsView() {
       {/* Goals Grid */}
       {goals.length === 0 ? (
         <div className="bg-white rounded-2xl p-12 border border-[#E7EDE7] shadow-2xs text-center text-xs text-[#718576]">
-          Belum ada target tabungan. Buat target pertamamu, misalnya laptop baru atau dana darurat.
+          No savings goals yet. Create your first goal, such as a new laptop or an emergency fund.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -234,7 +234,7 @@ export default function SavingsGoalsView() {
 
                     <div className="mt-2.5 flex items-center justify-between text-[11px] text-[#718576]">
                       <span>{g.deadline ? `Target: ${g.deadline}` : "No deadline"}</span>
-                      <span>{reached ? "Target tercapai!" : `Sisa: ${formatRupiah(left)}`}</span>
+                      <span>{reached ? "Goal reached!" : `Remaining: ${formatRupiah(left)}`}</span>
                     </div>
                   </div>
                 </div>
@@ -245,7 +245,7 @@ export default function SavingsGoalsView() {
                     onClick={() => setSelectedGoalId(g.id)}
                     className="flex-1 min-h-11 md:min-h-0 py-2 px-3 rounded-xl text-xs font-semibold text-[#244833] bg-[#E8EFEA] hover:bg-[#DCE6DF] transition-colors cursor-pointer"
                   >
-                    + Tambah Tabungan
+                    + Add Savings
                   </button>
                   <button
                     type="button"
@@ -265,23 +265,23 @@ export default function SavingsGoalsView() {
       {/* Quick Deposit Modal */}
       {selectedGoal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] bg-black/40 backdrop-blur-xs">
-          <div role="dialog" aria-modal="true" aria-label="Tambah Tabungan" className="w-full max-w-sm max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white rounded-3xl p-6 shadow-2xl border border-[#DCE4DD]">
-            <h3 className="text-sm font-bold text-[#1E3A2B]">Tambah Tabungan</h3>
+          <div role="dialog" aria-modal="true" aria-label="Add Savings" className="w-full max-w-sm max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white rounded-3xl p-6 shadow-2xl border border-[#DCE4DD]">
+            <h3 className="text-sm font-bold text-[#1E3A2B]">Add Savings</h3>
             <p className="text-xs text-[#718576] mt-0.5 mb-4">
-              Sisihkan sebagian allowance ke &quot;{selectedGoal.title}&quot;.
+              Set aside part of your allowance for &quot;{selectedGoal.title}&quot;.
             </p>
 
             <form onSubmit={handleDeposit} className="space-y-4">
               <div>
                 <label className="text-[11px] font-bold text-[#677C6D] block mb-1">
-                  Nominal Tambahan (Rp)
+                  Additional Amount (Rp)
                 </label>
                 <input
                   type="text"
                   inputMode="numeric"
                   required
                   autoFocus
-                  placeholder="Contoh: 50.000"
+                  placeholder="e.g. 50.000"
                   value={depositAmount}
                   onChange={(e) => setDepositAmount(formatInput(e.target.value))}
                   className="w-full px-3 py-2 rounded-xl border border-[#D7E2D9] text-base font-extrabold text-[#1E3A2B] focus:outline-none focus:border-[#224431]"
@@ -300,13 +300,13 @@ export default function SavingsGoalsView() {
                   onClick={closeDeposit}
                   className="w-1/2 min-h-11 py-2 text-xs font-semibold text-gray-600 bg-gray-100 rounded-xl cursor-pointer"
                 >
-                  Batal
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   className="w-1/2 min-h-11 py-2 text-xs font-bold text-white bg-[#224431] rounded-xl shadow-xs cursor-pointer"
                 >
-                  Simpan Tabungan
+                  Save Savings
                 </button>
               </div>
             </form>

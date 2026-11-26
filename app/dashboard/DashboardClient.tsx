@@ -12,11 +12,18 @@ import SavingsGoalsView from "@/components/dashboard/SavingsGoalsView";
 import SettingsView from "@/components/dashboard/SettingsView";
 import HelpView from "@/components/dashboard/HelpView";
 import AddExpenseModal from "@/components/dashboard/AddExpenseModal";
+import type { TxType } from "@/context/FinanceContext";
 
 export default function DashboardClient() {
   const [activeTab, setActiveTab] = useState<string>("overview");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [addExpenseModalOpen, setAddExpenseModalOpen] = useState(false);
+  const [addModalType, setAddModalType] = useState<TxType>("expense");
+
+  const openAddModal = (type: TxType) => {
+    setAddModalType(type);
+    setAddExpenseModalOpen(true);
+  };
 
   const renderActiveView = () => {
     switch (activeTab) {
@@ -38,7 +45,8 @@ export default function DashboardClient() {
         return (
           <OverviewView
             onSwitchTab={setActiveTab}
-            onOpenAddExpense={() => setAddExpenseModalOpen(true)}
+            onOpenAddExpense={() => openAddModal("expense")}
+            onOpenAddIncome={() => openAddModal("income")}
           />
         );
     }
@@ -59,7 +67,7 @@ export default function DashboardClient() {
         {/* Top Header */}
         <Header
           activeTab={activeTab}
-          onOpenAddExpense={() => setAddExpenseModalOpen(true)}
+          onOpenAddExpense={() => openAddModal("expense")}
           onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
         />
 
@@ -70,10 +78,13 @@ export default function DashboardClient() {
       </div>
 
       {/* 3. Global Add Expense Modal */}
-      <AddExpenseModal
-        isOpen={addExpenseModalOpen}
-        onClose={() => setAddExpenseModalOpen(false)}
-      />
+      {addExpenseModalOpen && (
+        <AddExpenseModal
+          isOpen
+          initialType={addModalType}
+          onClose={() => setAddExpenseModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

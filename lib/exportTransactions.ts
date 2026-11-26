@@ -20,18 +20,18 @@ const RUPIAH = '"Rp"#,##0';
 const FONT = 'Calibri';
 
 const MONTHS = [
-  'Januari',
-  'Februari',
-  'Maret',
+  'January',
+  'February',
+  'March',
   'April',
-  'Mei',
-  'Juni',
-  'Juli',
-  'Agustus',
+  'May',
+  'June',
+  'July',
+  'August',
   'September',
-  'Oktober',
+  'October',
   'November',
-  'Desember',
+  'December',
 ];
 
 // Build the date in UTC so Excel shows the same calendar day in every timezone
@@ -137,7 +137,7 @@ function setupPrint(ws: Worksheet, headerRow: number) {
     printTitlesRow: `${headerRow}:${headerRow}`,
     margins: { left: 0.6, right: 0.6, top: 0.75, bottom: 0.75, header: 0.3, footer: 0.3 },
   };
-  ws.headerFooter.oddFooter = '&L&8Sakuwise - Laporan Pengeluaran&R&8Halaman &P dari &N';
+  ws.headerFooter.oddFooter = '&L&8Sakuwise - Expense Report&R&8Page &P of &N';
 }
 
 export async function exportTransactionsXlsx(opts: ExportOptions): Promise<void> {
@@ -148,7 +148,7 @@ export async function exportTransactionsXlsx(opts: ExportOptions): Promise<void>
   const ExcelJS = (await import('exceljs')).default;
   const wb = new ExcelJS.Workbook();
   wb.creator = 'Sakuwise';
-  wb.title = 'Laporan Pengeluaran Sakuwise';
+  wb.title = 'Sakuwise Expense Report';
   wb.created = new Date();
 
   // ---------- Sheet 1: Transaksi ----------
@@ -156,7 +156,7 @@ export async function exportTransactionsXlsx(opts: ExportOptions): Promise<void>
   const COLS = 6;
   const aligns1: Align[] = ['center', 'center', 'left', 'left', 'right', 'left'];
 
-  const ws = wb.addWorksheet('Transaksi', {
+  const ws = wb.addWorksheet('Transactions', {
     views: [{ state: 'frozen', ySplit: HEADER_ROW, showGridLines: false }],
   });
   ws.columns = [
@@ -168,13 +168,13 @@ export async function exportTransactionsXlsx(opts: ExportOptions): Promise<void>
     { width: 34 },
   ];
 
-  addTitleBlock(ws, COLS, 'LAPORAN PENGELUARAN', 'Sakuwise - Pengelola Keuangan Pribadi');
+  addTitleBlock(ws, COLS, 'EXPENSE REPORT', 'Sakuwise - Personal Finance Manager');
 
   const info: Array<[string, string]> = [
-    ['Periode', periodLabel],
-    ['Cakupan data', filterNote || 'Semua transaksi'],
-    ['Tanggal ekspor', formatLongDate(fileDate)],
-    ['Jumlah transaksi', `${transactions.length} transaksi`],
+    ['Period', periodLabel],
+    ['Data scope', filterNote || 'All transactions'],
+    ['Export date', formatLongDate(fileDate)],
+    ['Number of transactions', `${transactions.length} transactions`],
   ];
   info.forEach(([label, value], i) => {
     const r = 4 + i;
@@ -193,7 +193,7 @@ export async function exportTransactionsXlsx(opts: ExportOptions): Promise<void>
   ws.getRow(8).height = 8;
 
   const headerRow = ws.getRow(HEADER_ROW);
-  headerRow.values = ['No', 'Tanggal', 'Deskripsi', 'Kategori', 'Jumlah', 'Keterangan'];
+  headerRow.values = ['No', 'Date', 'Description', 'Category', 'Amount', 'Notes'];
   styleHeaderRow(headerRow, aligns1);
 
   const first = HEADER_ROW + 1;
@@ -211,7 +211,7 @@ export async function exportTransactionsXlsx(opts: ExportOptions): Promise<void>
   const totalRowNo = last + 1;
   ws.mergeCells(`A${totalRowNo}:D${totalRowNo}`);
   const totalRow = ws.getRow(totalRowNo);
-  totalRow.getCell(1).value = 'TOTAL PENGELUARAN';
+  totalRow.getCell(1).value = 'TOTAL EXPENSES';
   totalRow.getCell(5).value = { formula: `SUM(E${first}:E${last})`, result: total };
   totalRow.getCell(5).numFmt = RUPIAH;
   styleTotalRow(totalRow, COLS, ['left', 'left', 'left', 'left', 'right', 'left']);
@@ -219,7 +219,7 @@ export async function exportTransactionsXlsx(opts: ExportOptions): Promise<void>
 
   ws.mergeCells(`A${totalRowNo + 2}:F${totalRowNo + 2}`);
   const note = ws.getCell(`A${totalRowNo + 2}`);
-  note.value = 'Dokumen ini dihasilkan secara otomatis oleh aplikasi Sakuwise.';
+  note.value = 'This document was generated automatically by the Sakuwise app.';
   note.font = { name: FONT, size: 9, italic: true, color: { argb: MUTED } };
   note.alignment = { vertical: 'middle', horizontal: 'left' };
 
@@ -238,22 +238,22 @@ export async function exportTransactionsXlsx(opts: ExportOptions): Promise<void>
   const COLS2 = 5;
   const aligns2: Align[] = ['center', 'left', 'right', 'right', 'right'];
 
-  const ws2 = wb.addWorksheet('Ringkasan Kategori', {
+  const ws2 = wb.addWorksheet('Category Summary', {
     views: [{ state: 'frozen', ySplit: HEADER2, showGridLines: false }],
   });
   ws2.columns = [{ width: 6 }, { width: 30 }, { width: 20 }, { width: 24 }, { width: 16 }];
 
-  addTitleBlock(ws2, COLS2, 'RINGKASAN PENGELUARAN PER KATEGORI', `Periode: ${periodLabel}`);
+  addTitleBlock(ws2, COLS2, 'EXPENSE SUMMARY BY CATEGORY', `Period: ${periodLabel}`);
   ws2.getRow(4).height = 8;
 
   const h2 = ws2.getRow(HEADER2);
-  h2.values = ['No', 'Kategori', 'Jumlah Transaksi', 'Total Pengeluaran', 'Persentase'];
+  h2.values = ['No', 'Category', 'Number of Transactions', 'Total Expenses', 'Percentage'];
   styleHeaderRow(h2, aligns2);
 
   const catFirst = HEADER2 + 1;
   const catLast = catFirst + cats.length - 1;
-  const rangeCat = `Transaksi!$D$${first}:$D$${last}`;
-  const rangeAmt = `Transaksi!$E$${first}:$E$${last}`;
+  const rangeCat = `Transactions!$D$${first}:$D$${last}`;
+  const rangeAmt = `Transactions!$E$${first}:$E$${last}`;
   const totalRef = `$D$${catLast + 1}`;
 
   cats.forEach(([name, v], i) => {
@@ -290,7 +290,7 @@ export async function exportTransactionsXlsx(opts: ExportOptions): Promise<void>
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `sakuwise-transaksi-${fileDate}.xlsx`;
+  a.download = `sakuwise-transactions-${fileDate}.xlsx`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

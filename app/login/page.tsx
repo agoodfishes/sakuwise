@@ -35,7 +35,7 @@ export default function LoginPage() {
     setErrorMessage(null);
 
     if (!identifier.trim() || !password) {
-      setErrorMessage("Silakan isi semua data yang diperlukan.");
+      setErrorMessage("Please fill in all required fields.");
       return;
     }
 
@@ -87,7 +87,7 @@ export default function LoginPage() {
             className="lg:hidden inline-flex items-center gap-1.5 text-xs font-semibold text-[#5B6D60] hover:text-[#1E3A2B]"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Beranda</span>
+            <span>Home</span>
           </Link>
         </div>
 
@@ -97,15 +97,15 @@ export default function LoginPage() {
           {/* Header Title */}
           <div className="mb-8">
             <span className="text-[11px] font-bold text-[#7A8E80] tracking-widest uppercase block mb-1.5">
-              {mode === "login" ? "SELAMAT DATANG KEMBALI" : "MULAI PERJALANANMU"}
+              {mode === "login" ? "WELCOME BACK" : "START YOUR JOURNEY"}
             </span>
             <h1 className="text-3xl sm:text-[34px] font-extrabold text-[#1E3A2B] tracking-tight leading-tight">
-              {mode === "login" ? "Masuk ke Sakuwise" : "Daftar Akun Sakuwise"}
+              {mode === "login" ? "Log In to Sakuwise" : "Create Your Sakuwise Account"}
             </h1>
             <p className="mt-2 text-sm text-[#5B6D60] leading-relaxed">
               {mode === "login"
-                ? "Lanjutkan rencana baik untuk keuanganmu."
-                : "Kelola keuangan pribadi lebih terarah tanpa biaya."}
+                ? "Continue your good plans for your finances."
+                : "Manage your personal finances with purpose, at no cost."}
             </p>
           </div>
 
@@ -124,7 +124,7 @@ export default function LoginPage() {
             {mode === "signup" && (
               <div>
                 <label htmlFor="name" className="text-xs font-bold text-[#1E3A2B] block mb-1.5">
-                  Nama lengkap
+                  Full name
                 </label>
                 <div className="relative">
                   <UserIcon className="w-4 h-4 text-[#8C9E91] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -134,7 +134,7 @@ export default function LoginPage() {
                     autoComplete="name"
                     type="text"
                     required
-                    placeholder="Contoh: Najwa"
+                    placeholder="e.g. Najwa"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-[#D5E1D7] text-base sm:text-sm font-medium text-[#1E3A2B] focus:outline-none focus:border-[#224431] focus:ring-2 focus:ring-[#224431]/40 bg-[#FAF8F5]/60 focus:bg-white transition-all"
@@ -146,7 +146,7 @@ export default function LoginPage() {
             {/* Email / Username field */}
             <div>
               <label htmlFor="identifier" className="text-xs font-bold text-[#1E3A2B] block mb-1.5">
-                Email atau nama pengguna
+                Email or username
               </label>
               <div className="relative">
                 <UserIcon className="w-4 h-4 text-[#8C9E91] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -156,7 +156,7 @@ export default function LoginPage() {
                   autoComplete="username"
                   type="text"
                   required
-                  placeholder="Masukkan email atau nama pengguna"
+                  placeholder="Enter your email or username"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-[#D5E1D7] text-base sm:text-sm font-medium text-[#1E3A2B] focus:outline-none focus:border-[#224431] focus:ring-2 focus:ring-[#224431]/40 bg-[#FAF8F5]/60 focus:bg-white transition-all"
@@ -167,7 +167,7 @@ export default function LoginPage() {
             {/* Password field */}
             <div>
               <label htmlFor="password" className="text-xs font-bold text-[#1E3A2B] block mb-1.5">
-                Kata sandi
+                Password
               </label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-[#8C9E91] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -177,7 +177,7 @@ export default function LoginPage() {
                   autoComplete={mode === "login" ? "current-password" : "new-password"}
                   type={showPassword ? "text" : "password"}
                   required
-                  placeholder="Masukkan kata sandi"
+                  placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-10 pr-10 py-3 rounded-xl border border-[#D5E1D7] text-base sm:text-sm font-medium text-[#1E3A2B] focus:outline-none focus:border-[#224431] focus:ring-2 focus:ring-[#224431]/40 bg-[#FAF8F5]/60 focus:bg-white transition-all"
@@ -186,7 +186,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8C9E91] hover:text-[#1E3A2B] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#224431] rounded cursor-pointer"
-                  aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -203,14 +203,14 @@ export default function LoginPage() {
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="w-4 h-4 rounded border-[#CBD8CE] text-[#224431] accent-[#224431] cursor-pointer"
                   />
-                  <span className="text-xs text-[#5B6D60]">Ingat saya</span>
+                  <span className="text-xs text-[#5B6D60]">Remember me</span>
                 </label>
                 <button
                   type="button"
-                  onClick={() => setErrorMessage("Fitur atur ulang kata sandi belum tersedia. Jika lupa, daftar dengan email baru.")}
+                  onClick={() => setErrorMessage("Password reset is not available yet. If you forgot your password, sign up with a new email.")}
                   className="text-xs text-[#224431] font-semibold hover:underline cursor-pointer"
                 >
-                  Lupa kata sandi?
+                  Forgot password?
                 </button>
               </div>
             )}
@@ -224,9 +224,9 @@ export default function LoginPage() {
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
               ) : mode === "login" ? (
-                "Masuk"
+                "Log In"
               ) : (
-                "Daftar Sekarang"
+                "Sign Up Now"
               )}
             </button>
           </form>
@@ -234,7 +234,7 @@ export default function LoginPage() {
           {/* Divider */}
           <div className="flex items-center gap-3 my-6">
             <div className="flex-1 h-px bg-[#E3EAE5]" />
-            <span className="text-xs text-[#7A8E80] font-medium">atau</span>
+            <span className="text-xs text-[#7A8E80] font-medium">or</span>
             <div className="flex-1 h-px bg-[#E3EAE5]" />
           </div>
 
@@ -246,14 +246,14 @@ export default function LoginPage() {
             className="w-full py-3.5 px-4 rounded-xl text-sm font-bold text-[#1E3A2B] bg-white border border-[#D5E1D7] hover:bg-[#FAF8F5] transition-all duration-200 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-70"
           >
             <GoogleIcon className="w-5 h-5" />
-            <span>Lanjutkan dengan Google</span>
+            <span>Continue with Google</span>
           </button>
 
           {/* Toggle Login / Sign Up */}
           <div className="mt-6 text-center">
             {mode === "login" ? (
               <p className="text-xs text-[#5B6D60]">
-                Belum punya akun?{" "}
+                Don&apos;t have an account?{" "}
                 <button
                   type="button"
                   onClick={() => {
@@ -262,12 +262,12 @@ export default function LoginPage() {
                   }}
                   className="font-bold text-[#224431] hover:underline cursor-pointer"
                 >
-                  Daftar gratis
+                  Sign up for free
                 </button>
               </p>
             ) : (
               <p className="text-xs text-[#5B6D60]">
-                Sudah punya akun?{" "}
+                Already have an account?{" "}
                 <button
                   type="button"
                   onClick={() => {
@@ -276,7 +276,7 @@ export default function LoginPage() {
                   }}
                   className="font-bold text-[#224431] hover:underline cursor-pointer"
                 >
-                  Masuk di sini
+                  Log in here
                 </button>
               </p>
             )}
@@ -287,11 +287,11 @@ export default function LoginPage() {
         {/* Bottom: Left Footer Links & Copyright */}
         <div className="pt-6 border-t border-[#F0F4F1] flex flex-col sm:flex-row items-center justify-between text-xs text-[#7A8E80] gap-3">
           <div className="flex items-center gap-4">
-            <span>Kebijakan Privasi</span>
+            <span>Privacy Policy</span>
             <span>•</span>
-            <span>Syarat & Ketentuan</span>
+            <span>Terms & Conditions</span>
           </div>
-          <p>© 2026 Sakuwise. Semua hak dilindungi.</p>
+          <p>© 2026 Sakuwise. All rights reserved.</p>
         </div>
 
       </div>
@@ -306,7 +306,7 @@ export default function LoginPage() {
             className="inline-flex items-center gap-2 text-xs font-semibold text-[#5B6D60] hover:text-[#1E3A2B] transition-colors py-2 px-3 rounded-lg hover:bg-black/[0.03]"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Kembali ke beranda</span>
+            <span>Back to home</span>
           </Link>
         </div>
 
@@ -316,17 +316,17 @@ export default function LoginPage() {
           {/* Pill Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FEF3E2] border border-[#FDE5C5] text-xs font-bold text-[#9A5B15] mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#E08C38]" />
-            <span>Satu langkah bijak setiap hari.</span>
+            <span>One smart step every day.</span>
           </div>
 
           {/* Headline Text */}
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E3A2B] tracking-tight leading-tight">
-            Uang lebih terarah. <br />
-            Hidup lebih tenang.
+            Money with more direction. <br />
+            Life with more peace.
           </h2>
 
           <p className="mt-2.5 text-sm text-[#5B6D60] leading-relaxed mb-8">
-            Semua saku, rencana, dan tujuanmu di satu tempat.
+            All your pockets, plans, and goals in one place.
           </p>
 
           {/* Hero Card Preview Mockup */}

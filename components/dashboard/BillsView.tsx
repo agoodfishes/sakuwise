@@ -83,12 +83,12 @@ export default function BillsView() {
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white rounded-2xl p-6 border border-[#E7EDE7] shadow-2xs gap-4">
         <div>
-          <h2 className="text-base font-bold text-[#1E3A2B]">Tagihan &amp; Pengingat Rutin</h2>
+          <h2 className="text-base font-bold text-[#1E3A2B]">Recurring Bills &amp; Reminders</h2>
           <p className="text-xs text-[#6F8273]">
             {unpaid.length === 0
-              ? "Semua tagihan sudah lunas. Mantap!"
-              : `${unpaid.length} tagihan belum dibayar, total ${formatRupiah(unpaidTotal)}.`}
-            {overdueCount > 0 ? ` ${overdueCount} sudah lewat jatuh tempo.` : ""}
+              ? "All bills are paid. Great job!"
+              : `${unpaid.length} unpaid ${unpaid.length === 1 ? "bill" : "bills"}, total ${formatRupiah(unpaidTotal)}.`}
+            {overdueCount > 0 ? ` ${overdueCount} overdue.` : ""}
           </p>
         </div>
         <button
@@ -97,7 +97,7 @@ export default function BillsView() {
           className="min-h-11 md:min-h-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[#224431] hover:bg-[#163323] transition-colors cursor-pointer self-start sm:self-auto"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>{showAdd ? "Tutup" : "Tambah Tagihan"}</span>
+          <span>{showAdd ? "Close" : "Add Bill"}</span>
         </button>
       </div>
 
@@ -109,7 +109,7 @@ export default function BillsView() {
         >
           <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
             <div className="sm:col-span-4">
-              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Nama tagihan *</label>
+              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Bill name *</label>
               <input
                 type="text"
                 required
@@ -120,7 +120,7 @@ export default function BillsView() {
               />
             </div>
             <div className="sm:col-span-3">
-              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Nominal *</label>
+              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Amount *</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#1E3A2B]">
                   Rp
@@ -140,7 +140,7 @@ export default function BillsView() {
               </div>
             </div>
             <div className="sm:col-span-3">
-              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Jatuh tempo *</label>
+              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Due date *</label>
               <input
                 type="date"
                 required
@@ -150,7 +150,7 @@ export default function BillsView() {
               />
             </div>
             <div className="sm:col-span-2">
-              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Kategori</label>
+              <label className="text-[11px] font-semibold text-[#667A6C] block mb-1">Category</label>
               <select
                 value={activeCategory}
                 onChange={(e) => setCategory(e.target.value)}
@@ -175,7 +175,7 @@ export default function BillsView() {
               type="submit"
               className="min-h-11 md:min-h-0 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] cursor-pointer"
             >
-              Simpan tagihan
+              Save bill
             </button>
           </div>
         </form>
@@ -184,7 +184,7 @@ export default function BillsView() {
       {/* Bills Grid */}
       {bills.length === 0 ? (
         <div className="bg-white rounded-2xl p-12 border border-[#E7EDE7] shadow-2xs text-center text-xs text-[#718576]">
-          Belum ada tagihan. Tambahkan tagihan rutin seperti Wi-Fi, kos, atau langganan.
+          No bills yet. Add recurring bills such as Wi-Fi, rent, or subscriptions.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -252,7 +252,7 @@ export default function BillsView() {
                       className="min-h-11 md:min-h-0 inline-flex items-center gap-1.5 text-xs font-semibold text-[#576B5D] hover:text-[#1E3A2B] cursor-pointer"
                     >
                       <Undo2 className="w-3.5 h-3.5" />
-                      <span>Tandai belum lunas</span>
+                      <span>Mark as unpaid</span>
                     </button>
                   ) : (
                     <button
@@ -261,7 +261,7 @@ export default function BillsView() {
                       className="min-h-11 md:min-h-0 inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#224431] hover:bg-[#163323] px-3 py-1.5 rounded-lg cursor-pointer"
                     >
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
-                      <span>Tandai lunas</span>
+                      <span>Mark as paid</span>
                     </button>
                   )}
                   <button
